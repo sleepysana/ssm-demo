@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+	   https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--拦截器-->
+    <mvc:interceptors>
+        <!--方法耗时统计拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**/*"/>
+            <bean class="cn.akira.interceptor.MethodTimerInterceptor"/>
+        </mvc:interceptor>
+
+        <!--会话拦截器-->
+        <mvc:interceptor>
+            <!-- 拦截所有，包括登录入口 -->
+            <mvc:mapping path="/**/*"/>
+            <!--排除这些URI,(不拦截这些URI)-->
+            <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/user/register"/>
+            <mvc:exclude-mapping path="/static/**/*"/>
+            <bean class="cn.akira.interceptor.SessionInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+</beans>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.prg//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.akira.mapper.UserMapper">
+    <resultMap id="user" type="cn.akira.pojo.User">
+        <!--@mbg.generated-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="uname" jdbcType="VARCHAR" property="uname"/>
+        <result column="bind_email" jdbcType="VARCHAR" property="bindEmail"/>
+        <result column="bind_phone" jdbcType="VARCHAR" property="bindPhone"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <association property="userInfo" javaType="cn.akira.pojo.UserInfo">
+            <id column="id" property="id"/>
+            <result column="gender" property="gender"/>
+            <result column="birthday" property="birthday"/>
+            <result column="phone" property="phone"/>
+            <result column="tel" property="tel"/>
+            <result column="email" property="email"/>
+            <result column="addr" property="addr"/>
+            <result column="reg_date" property="regDate"/>
+        </association>
+    </resultMap>
+
+
+    <select id="queryUser" resultType="cn.akira.pojo.User">
+        SELECT *
+        FROM ssm_demo.user
+        WHERE uname = #{uname}
+        AND password = #{password}
+    </select>
+    <select id="queryAllBaseInfo" resultMap="user">
+        SELECT u.id,
+               u.uname,
+               ui.gender,
+               ui.birthday,
+               ui.phone,
+               ui.addr
+        FROM user u
+                 LEFT JOIN user_info ui ON u.id = ui.id
+    </select>
+</mapper>

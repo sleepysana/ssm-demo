@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress XmlDefaultAttributeValue -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd ">
+
+    <context:component-scan base-package="cn.akira.mapper">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--这里引入数据库配置文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <bean class="com.mchange.v2.c3p0.ComboPooledDataSource" id="dataSource">
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <!--如果有需要，建议把所有的属性都写到properties配置文件中-->
+        <!--c3p0连接池的私有属性-->
+        <property name="initialPoolSize" value="${initialPoolSize}"/>
+        <property name="maxPoolSize" value="${maxPoolSize}"/>
+        <property name="minPoolSize" value="${minPoolSize}"/>
+        <property name="autoCommitOnClose" value="${autoCommitOnClose}"/>
+        <property name="checkoutTimeout" value="${checkoutTimeout}"/>
+        <property name="acquireRetryAttempts" value="${acquireRetryAttempts}"/>
+    </bean>
+
+    <!--整合MyBatis-->
+    <!--1.注入MyBatis的sqlSessionFactory-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
+        <property name="dataSource" ref="dataSource"/>
+
+        <!--引入mapper文件-->
+        <property name="mapperLocations" value="classpath:mapper/**/*.xml"/>
+        
+        <!--MyBatis配置-->
+        <property name="configuration">
+            <bean class="org.apache.ibatis.session.Configuration">
+                <!--下划线转驼峰-->
+                <property name="mapUnderscoreToCamelCase" value="true"/>
+                <!--log4j-->
+                <property name="logImpl"  value="org.apache.ibatis.logging.log4j.Log4jImpl"/>
+            </bean>
+        </property>
+        <property name="plugins">
+            <array>
+                <!--分页插件的配置，拦截器实现分页功能-->
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            helperDialect=mysql
+                            reasonable=true
+                            supportMethodArguments=true
+                            params=count=countSql
+                            autoRuntimeDialect=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!--持久层接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.akira.mapper"/>
+        <!--value是引用整合MyBatis的bean的id-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!--事务管理,使用数据源事务管理类管理-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--配置事务管理的策略  transaction-manager:指向上面配置的transactionManager-->
+    <tx:advice transaction-manager="transactionManager" id="transactionAdvice">
+        <!--事务处理的相关值及其传播性-->
+        <tx:attributes>
+            <!--查询相关配置为只读 select,get或者query开头-->
+            <tx:method name="select*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="query*" read-only="true"/>
+            <!--增删改配置 如有异常就事务回滚-->
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--
+        使用aop对事务管理的范围进行织入，明确两个点:
+        1.哪些地方需要进行事务的管理
+        2.使用什么策略来管理
+    -->
+    <aop:config>
+        <!--这个地方需要进行事务管理-->
+        <aop:pointcut id="txCut" expression="execution(* cn.akira.service..*.*(..))"/>
+        <!--用transactionAdvice（上面配置的）策略来管理-->
+        <aop:advisor advice-ref="transactionAdvice" pointcut-ref="txCut"/>
+    </aop:config>
+
+    <!--采用注解进行事务配置，请在Service的实现类上加上@Transactional注解-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>
