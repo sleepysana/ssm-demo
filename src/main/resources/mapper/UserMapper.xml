@@ -24,8 +24,18 @@
     <select id="queryUser" resultType="cn.akira.pojo.User">
         SELECT *
         FROM ssm_demo.user
-        WHERE uname = #{uname}
-        AND password = #{password}
+        <where>
+            <if test="uname != null and uname != ''">
+                uname=#{uname}
+            </if>
+            <if test="bindEmail != null and bindEmail != ''">
+                AND bind_email = #{bindEmail}
+            </if>
+            <if test="bindPhone != null and bindPhone != ''">
+                AND bind_phone = #{bindPhone}
+            </if>
+            AND password = #{password}
+        </where>
     </select>
     <select id="queryAllBaseInfo" resultMap="user">
         SELECT u.id,

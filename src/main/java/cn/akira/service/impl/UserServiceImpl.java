@@ -24,8 +24,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(User user) throws Exception {
-        String encryptedPassword = DigestUtils.sha1Hex(user.getPassword());
-        user.setPassword(encryptedPassword);
         User dbUser = userMapper.queryUser(user);
         return dbUser;
     }

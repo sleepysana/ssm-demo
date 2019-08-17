@@ -23,6 +23,7 @@
             <mvc:exclude-mapping path="/user/login"/>
             <mvc:exclude-mapping path="/user/register"/>
             <mvc:exclude-mapping path="/static/**/*"/>
+            <mvc:exclude-mapping path="/login.jsp"/>
             <bean class="cn.akira.interceptor.SessionInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
