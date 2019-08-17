@@ -3,7 +3,6 @@ package cn.akira.controller;
 import cn.akira.pojo.User;
 import cn.akira.service.UserService;
 import cn.akira.util.ServletUtil;
-import org.apache.commons.codec.cli.Digest;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +23,11 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("login")
+    public String loginPage(){
+        return "/../../login";
+    }
+
+    @RequestMapping("login.do")
     public String login(User user, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
         boolean unameIsEmpty = user.getUname() == null || user.getUname().equals("");
         boolean phoneIsEmpty = user.getBindPhone() == null || user.getBindPhone().equals("");
@@ -32,8 +36,7 @@ public class UserController {
 
         //如果除密码外的三个用作登录凭据的属性都为空 或者 密码为空  均不能登录  懂我意思吧？
         if (unameIsEmpty && phoneIsEmpty && emailIsEmpty || passwordIsEmpty) {
-            ServletUtil.redirectOutOfIframe("/login.jsp", request, response);
-            return null;
+            ServletUtil.redirectOutOfIframe(request.getContextPath(), response);
         }
         //数据库检查
         String sha1HexPassword = DigestUtils.sha1Hex(user.getPassword()); //用户密码加密
@@ -42,7 +45,7 @@ public class UserController {
         if (dbUser != null) {
             //将用户信息存储到会话的中
             session.setAttribute("SESSION_USER", dbUser);
-            return "redirect:/";
+            return "redirect:/index";
         } else {
             System.out.println("用户名或密码不正确");
             return "redirect:/login.jsp";
@@ -50,7 +53,6 @@ public class UserController {
     }
 
     @RequestMapping("userList")
-
     public String userList(Model model) throws Exception {
         List<User> userBaseInfoList = userService.getUserBaseInfoList();
         model.addAttribute("userList", userBaseInfoList);

@@ -1,15 +1,12 @@
 package cn.akira.interceptor;
 
 import cn.akira.pojo.User;
-import cn.akira.service.UserService;
 import cn.akira.util.ServletUtil;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 
 /**
  * 会话拦截器
@@ -17,8 +14,6 @@ import java.io.PrintWriter;
 public class SessionInterceptor implements HandlerInterceptor {
     private static final Logger LOGGER = Logger.getLogger(SessionInterceptor.class);
 
-    @Autowired
-    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -26,7 +21,7 @@ public class SessionInterceptor implements HandlerInterceptor {
         Object userSession = request.getSession().getAttribute("SESSION_USER");
         if (userSession == null) {
             LOGGER.warn("["+request.getRequestURI()+"] 需要登录有相应权限的用户才能进行,现在跳转至登录页面");
-            ServletUtil.redirectOutOfIframe(request.getContextPath()+"/login.jsp",request,response);
+            ServletUtil.redirectOutOfIframe(request.getContextPath()+"/login.jsp",response);
             return false;
         }
         if (userSession instanceof User) {
@@ -43,7 +38,7 @@ public class SessionInterceptor implements HandlerInterceptor {
             return true;
         } else {
             LOGGER.error("请先登录");
-            ServletUtil.redirectOutOfIframe("/login.jsp",request,response);
+            ServletUtil.redirectOutOfIframe("/login.jsp",response);
             return false;
         }
     }

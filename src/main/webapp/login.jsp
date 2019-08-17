@@ -34,7 +34,7 @@
                 <img src="${path}/static/images/img-01.png" alt="IMG">
             </div>
 
-            <form class="login100-form validate-form" method="post" action="${path}/user/login">
+            <form class="login100-form validate-form" method="post" action="${path}/user/login.do">
 				<span class="login100-form-title">
 					登录
 				</span>

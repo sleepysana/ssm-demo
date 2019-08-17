@@ -63,7 +63,7 @@
                         <dd><a href="javascript:;" onclick="iframeLocation('${path}/user/userList')" id="list1">
                             后台数据展示
                         </a></dd>
-                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/main/fileDownUpLoad')">文件上传与下载</a></dd>
+                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/fileDownUpLoad')">文件上传与下载</a></dd>
                         <dd><a href="javascript:;">列表三</a></dd>
                         <dd><a href="">超链接</a></dd>
                     </dl>
@@ -83,7 +83,7 @@
     </div>
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <iframe id="mainContent" src="${path}/main/welcome" style="height: 99%; width: 100%" frameborder="0"></iframe>
+        <iframe id="mainContent" src="${path}/welcome" style="height: 99%; width: 100%" frameborder="0"></iframe>
     </div>
 
     <div class="layui-footer">
@@ -94,10 +94,22 @@
 
 <%--suppress ES6ConvertVarToLetConst --%>
 <script>
-    //JavaScript代码区域
-    layui.use('element', function () {
-        var element = layui.element;
+
+    $(function () {
+        // $("body").hide();
+        layui.use('element', function () {
+            var element = layui.element;
+        });
+        layui.use('layer', function(){
+            var layer = layui.layer;
+            layer.load(2);
+            layer.close(1);
+        });
     });
+    //JavaScript代码区域
+
+
+
 
     function iframeLocation(path) {
         $("#mainContent").attr("src", path);

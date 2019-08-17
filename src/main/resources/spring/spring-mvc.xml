@@ -21,9 +21,9 @@
             <mvc:mapping path="/**/*"/>
             <!--排除这些URI,(不拦截这些URI)-->
             <mvc:exclude-mapping path="/user/login"/>
-            <mvc:exclude-mapping path="/user/register"/>
+            <mvc:exclude-mapping path="/user/login.do"/>
+            <mvc:exclude-mapping path="/init"/>
             <mvc:exclude-mapping path="/static/**/*"/>
-            <mvc:exclude-mapping path="/login.jsp"/>
             <bean class="cn.akira.interceptor.SessionInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

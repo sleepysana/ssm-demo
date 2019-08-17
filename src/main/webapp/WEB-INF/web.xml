@@ -54,14 +54,18 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
-    <!-- Session配置 -->
-    <!-- 将超时时间设置为1年 -->
-    <session-config>
-        <!--最小单位是分钟-->
-        <session-timeout>5</session-timeout>
-        <cookie-config>
-            <!--最小单位是秒-->
-            <max-age>300</max-age>
-        </cookie-config>
-    </session-config>
+    <welcome-file-list>
+        <welcome-file>initialize.jsp</welcome-file>
+    </welcome-file-list>
+
+<!--    &lt;!&ndash; Session配置 &ndash;&gt;-->
+<!--    &lt;!&ndash; 将超时时间设置为1年 &ndash;&gt;-->
+<!--    <session-config>-->
+<!--    &lt;!&ndash;最小单位是分钟&ndash;&gt;-->
+<!--    <session-timeout>5</session-timeout>-->
+<!--    <cookie-config>-->
+<!--        &lt;!&ndash;最小单位是秒&ndash;&gt;-->
+<!--        <max-age>300</max-age>-->
+<!--    </cookie-config>-->
+<!--</session-config>-->
 </web-app>
