@@ -24,7 +24,7 @@
 <div class="layui-layout layui-layout-admin">
 
     <div class="layui-header">
-        <div class="layui-logo" id="mainTitle" onclick="iframeLocation('${path}/layui/welcome')">管理系统主页</div>
+        <div class="layui-logo" id="mainTitle" onclick="iframeLocation('${path}/welcome')">管理系统主页</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item"><a href="">顶部导航1</a></li>
@@ -58,14 +58,17 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <li class="layui-nav-item">
-                    <a class="" href="javascript:;">导航1</a>
+                    <a class="" href="javascript:;">后台数据展示</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/user/userList')" id="list1">
-                            后台数据展示
+                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/user/userList1')" id="list1">
+                            后台数据展示(jstl EL表达式方式)
                         </a></dd>
-                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/fileDownUpLoad')">文件上传与下载</a></dd>
-                        <dd><a href="javascript:;">列表三</a></dd>
-                        <dd><a href="">超链接</a></dd>
+                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/user/userList2')">
+                            后台数据展示(ajax异步方式)
+                        </a></dd>
+                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/user/userList3')">
+                            后台数据展示(LayUI组件能力)
+                        </a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -83,7 +86,7 @@
     </div>
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <iframe id="mainContent" src="${path}/welcome" style="height: 99%; width: 100%" frameborder="0"></iframe>
+        <iframe id="mainContent" src="https://www.baidu.com" style="height: 99%; width: 100%" frameborder="0"></iframe>
     </div>
 
     <div class="layui-footer">
@@ -95,26 +98,31 @@
 <%--suppress ES6ConvertVarToLetConst --%>
 <script>
 
-    $(function () {
-        // $("body").hide();
-        layui.use('element', function () {
-            var element = layui.element;
-        });
-        layui.use('layer', function(){
-            var layer = layui.layer;
-            layer.load(2);
-            layer.close(1);
-        });
+    layui.use("element", function () {
+        var element = layui.elements;
     });
-    //JavaScript代码区域
 
-
-
+    $(function () {
+        load(1);
+        iframeLocation("${path}/welcome");
+        loadClose(1);
+    });
 
     function iframeLocation(path) {
         $("#mainContent").attr("src", path);
     }
 
+    function load(i) {
+        layui.use('layer', function () {
+            layui.layer.load(i);
+        });
+    }
+
+    function loadClose(i) {
+        layui.use('layer', function () {
+            layui.layer.close(i);
+        });
+    }
 </script>
 </body>
 </html>

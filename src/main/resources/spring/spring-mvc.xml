@@ -22,11 +22,34 @@
             <mvc:mapping path="/**/*"/>
             <!--排除这些URI,(不拦截这些URI)-->
             <mvc:exclude-mapping path="/user/login"/>
-            <mvc:exclude-mapping path="/user/login.do"/>
+            <mvc:exclude-mapping path="/user/doLogin"/>
             <mvc:exclude-mapping path="/check"/>
             <mvc:exclude-mapping path="/static/**/*"/>
+            <mvc:exclude-mapping path="/test/**/*.jsp"/>
             <bean class="cn.akira.interceptor.SessionInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
+    <!-- 500错误页配置 -->
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Exception">/error/500</prop>
+                <prop key="java.lang.Throwable">/error/500</prop>
+            </props>
+        </property>
+        <property name="statusCodes">
+            <props>
+                <prop key="/errors/500">500</prop>
+            </props>
+        </property>
+        <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+        <property name="warnLogCategory" value="ERROR"/>
+        <!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->
+        <property name="defaultErrorView" value="/error/500"/>
+        <!-- 默认HTTP状态码 -->
+        <property name="defaultStatusCode" value="500"/>
+    </bean>
+
     <mvc:resources mapping="/**" location="static"/>
 </beans>

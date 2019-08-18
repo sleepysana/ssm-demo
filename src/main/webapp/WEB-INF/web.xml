@@ -54,10 +54,6 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
-    <welcome-file-list>
-        <welcome-file>init.jsp</welcome-file>
-    </welcome-file-list>
-
     <!-- Session周期配置 -->
     <!-- 将超时时间设置为10小时 -->
     <session-config>
@@ -68,4 +64,21 @@
         <max-age>36000</max-age>
     </cookie-config>
 </session-config>
+
+    <welcome-file-list>
+        <welcome-file>init.jsp</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <error-code>400</error-code>
+        <location>/error/400</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500</location>
+    </error-page>
 </web-app>

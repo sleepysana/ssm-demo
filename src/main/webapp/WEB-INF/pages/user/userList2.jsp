@@ -30,20 +30,7 @@
             <th>地址</th>
         </tr>
         </thead>
-        <tbody id="userList">
-        <%--                <c:forEach items="${userList}" var="userList">--%>
-        <%--                    <tr>--%>
-        <%--                        <td>${userList.id}</td>--%>
-        <%--                        <td>${userList.uname}</td>--%>
-        <%--                        <td>${userList.userInfo.gender}</td>--%>
-        <%--                        <td>--%>
-        <%--                            <fmt:formatDate value="${userList.userInfo.birthday}" pattern="yyyy-MM-dd"/>--%>
-        <%--                        </td>--%>
-        <%--                        <td>${userList.userInfo.phone}</td>--%>
-        <%--                        <td>${userList.userInfo.addr}</td>--%>
-        <%--                    </tr>--%>
-        <%--                </c:forEach>--%>
-        </tbody>
+        <tbody id="userList"></tbody>
     </table>
 </div>
 </body>
@@ -58,34 +45,36 @@
         });
         $.ajax({
             type: "POST",
-            url: "${path}/user/listUser",
+            url: "${path}/user/listUser2",
             contentType: 'application/x-www-form-urlencoded;charset=utf-8',
             dataType: "json",
             success: function (data) {
-                listUser(data);
+                console.log(data);
+                listUser(data.resource);
             },
             error: function (e) {
-                console.log(e);
+                console.log("响应数据获取失败了:", e);
+                laylay.close(1);
             }
         });
     });
 
-    function listUser(data) {
-        console.log(data);
+    function listUser(resource) {
         var innerHtml = "";
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < resource.length; i++) {
             innerHtml += "<tr>\n" +
-                "<td>" + data[i].id + "</td>\n" +
-                "<td>" + data[i].uname + "</td>\n" +
-                "<td>" + data[i].userInfo.gender + "</td>\n" +
-                "<td>" + toDate(data[i].userInfo.birthday) + "</td>\n" +
-                "<td>" + data[i].userInfo.phone + "</td>\n" +
-                "<td>" + data[i].userInfo.addr + "</td>\n" +
+                "<td>" + resource[i].id + "</td>\n" +
+                "<td>" + resource[i].uname + "</td>\n" +
+                "<td>" + resource[i].userInfo.gender + "</td>\n" +
+                "<td>" + toDate(resource[i].userInfo.birthday) + "</td>\n" +
+                "<td>" + resource[i].userInfo.phone + "</td>\n" +
+                "<td>" + resource[i].userInfo.addr + "</td>\n" +
                 "</tr>"
         }
         $("#userList").html(innerHtml);
         laylay.close(1);
     }
+
     function toDate(timestamp) {
         var date = new Date(timestamp),
             Y = date.getFullYear() + '-',

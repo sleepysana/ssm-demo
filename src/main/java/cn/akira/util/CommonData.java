@@ -3,38 +3,37 @@ package cn.akira.util;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class ReturnableData implements Serializable {
+public class CommonData implements Serializable {
     private String message = null;
     private boolean flag = true;
-
-    public ReturnableData() {}
-
     private String errInfo = null;
     private String errDetail = null;
     private Object resource = null;
 
-    public ReturnableData(String message) {
+    public CommonData() {}
+
+    public CommonData(String message) {
         this.message = message;
     }
 
-    public ReturnableData(String message, boolean flag) {
+    public CommonData(String message, boolean flag) {
         this.message = message;
         this.flag = flag;
     }
 
-    public ReturnableData(String message, boolean flag, Exception e) {
+    public CommonData(String message, boolean flag, Exception e) {
         this.message = message;
         this.flag = flag;
         this.errInfo = e.getLocalizedMessage();
         this.errDetail = Arrays.toString(e.getStackTrace());
     }
 
-    public ReturnableData(String message, Object resource) {
+    public CommonData(String message, Object resource) {
         this.message = message;
         this.resource = resource;
     }
 
-    public ReturnableData(String message, Object resource, boolean flag) {
+    public CommonData(String message, Object resource, boolean flag) {
         this.message = message;
         this.flag = flag;
         this.resource = resource;

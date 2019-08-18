@@ -15,23 +15,33 @@
     <link rel="stylesheet" href="${path}/static/css/notiflix-1.3.0.min.css">
     <title>checking...</title>
 </head>
+<%--suppress HtmlDeprecatedAttribute --%>
 <body bgcolor="#6495ed"></body>
 <script type="text/javascript">
     Notiflix.Loading.Init({
-        clickToClose:false
+        clickToClose: false
     });
+
+    function random() {
+        var x = 6000;
+        var y = 300;
+        return parseInt(Math.random() * (x - y + 1) + y);
+    }
+
     $(function () {
         Notiflix.Loading.Hourglass();
         $.ajax({
-            type:"get",
-            url:"${path}/check",
-            dataType:"text",
-            async:"false",
-            success:function (data) {
+            type: "get",
+            url: "${path}/check",
+            dataType: "text",
+            async: "false",
+            success: function (data) {
                 console.log(data);
-                window.location.href=data;
+                setTimeout(function () {
+                    window.location.href = data;
+                },random());
             },
-            error:function (e) {
+            error: function (e) {
                 console.log(e);
             }
         })

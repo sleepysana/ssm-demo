@@ -1,4 +1,4 @@
-<%--suppress HtmlFormInputWithoutLabel --%>
+<%--suppress HtmlUnknownTarget,HtmlFormInputWithoutLabel --%>
 <%--
   Created by IntelliJ IDEA.
   User: akira
@@ -47,7 +47,7 @@
 					</span>
                 </div>
                 <div class="container-login100-form-btn">
-                    <imput type="button" class="login100-form-btn" id="submit">登!</imput>
+                    <input type="button" class="login100-form-btn" id="submit" value="登！">
                 </div>
                 <div class="text-center p-t-12">
                     <a class="txt2" href="javascript:">忘记密码？</a>
@@ -66,27 +66,36 @@
     Notiflix.Report.Init();
     Notiflix.Confirm.Init();
     Notiflix.Loading.Init({
-        clickToClose: true
+        clickToClose: false
     });
     $("#submit").click(function () {
         var bindEmail = $("#bindEmail").val();
         var password = $("#password").val();
-        $.ajax({
-            type: "POST",
-            url: "${path}/user/login.do",
-            data: {
-                "bindEmail": bindEmail,
-                "password": password
-            },
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                window.location.href = data.resource;
-            },
-            error: function (e) {
-                console.log("111");
-            }
-        })
-    })
+        Notiflix.Loading.Circle();
+        setTimeout(function () {
+            $.ajax({
+                type: "POST",
+                url: "${path}/user/doLogin",
+                data: {
+                    "bindEmail": bindEmail,
+                    "password": password
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    window.location.href = data.resource;
+                },
+                error: function (e) {
+                    console.error("请求错误",e);
+                }
+            })
+        },random());
+    });
+
+    function random() {
+        var x = 3000;
+        var y = 300;
+        return parseInt(Math.random() * (x - y + 1) + y);
+    }
 </script>
 </html>
