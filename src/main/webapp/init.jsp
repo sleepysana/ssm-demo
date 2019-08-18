@@ -10,25 +10,21 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <script src="${path}/static/js/layui.js"></script>
     <script src="${path}/static/js/jquery-3.4.1.min.js"></script>
-    <link rel="stylesheet" href="${path}/static/css/layui.css">
-    <title>载入中</title>
+    <script src="${path}/static/js/notiflix-1.3.0.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="${path}/static/css/notiflix-1.3.0.min.css">
+    <title>checking...</title>
 </head>
-<body>
-        <i class="layui-icon">&#xe63e;</i>
-</body>
+<body bgcolor="#6495ed"></body>
 <script type="text/javascript">
-
+    Notiflix.Loading.Init({
+        clickToClose:false
+    });
     $(function () {
-        layui.use('layer', function(){
-            var layer = layui.layer;
-            layer.load(1);
-            // layer.close(1);
-        });
+        Notiflix.Loading.Hourglass();
         $.ajax({
             type:"get",
-            url:"${path}/init",
+            url:"${path}/check",
             dataType:"text",
             async:"false",
             success:function (data) {

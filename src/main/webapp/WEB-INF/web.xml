@@ -55,17 +55,17 @@
   </listener>
 
     <welcome-file-list>
-        <welcome-file>initialize.jsp</welcome-file>
+        <welcome-file>init.jsp</welcome-file>
     </welcome-file-list>
 
-<!--    &lt;!&ndash; Session配置 &ndash;&gt;-->
-<!--    &lt;!&ndash; 将超时时间设置为1年 &ndash;&gt;-->
-<!--    <session-config>-->
-<!--    &lt;!&ndash;最小单位是分钟&ndash;&gt;-->
-<!--    <session-timeout>5</session-timeout>-->
-<!--    <cookie-config>-->
-<!--        &lt;!&ndash;最小单位是秒&ndash;&gt;-->
-<!--        <max-age>300</max-age>-->
-<!--    </cookie-config>-->
-<!--</session-config>-->
+    <!-- Session周期配置 -->
+    <!-- 将超时时间设置为10小时 -->
+    <session-config>
+    <!--最小单位是分钟-->
+    <session-timeout>600</session-timeout>
+    <cookie-config>
+        <!--最小单位是秒-->
+        <max-age>36000</max-age>
+    </cookie-config>
+</session-config>
 </web-app>

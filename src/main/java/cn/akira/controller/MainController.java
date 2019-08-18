@@ -12,12 +12,12 @@ public class MainController {
 
     @RequestMapping("index")
     public String toIndexPage(){
-        return "/../../index";
+        return "index";
     }
 
-    @RequestMapping("init")
+    @RequestMapping("check")
     @ResponseBody
-    public String initializePage(HttpServletRequest request) {
+    public String checkSession(HttpServletRequest request) {
         Object userSession = request.getSession().getAttribute("SESSION_USER");
         if (userSession == null) {
             return  request.getContextPath()+"/user/login";

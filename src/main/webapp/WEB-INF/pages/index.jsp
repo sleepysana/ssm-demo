@@ -50,7 +50,7 @@
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="${path}/login.jsp" id="exit">退了</a></li>
+            <li class="layui-nav-item"><a href="${path}/user/exit" id="exit">退了</a></li>
         </ul>
     </div>
     <div class="layui-side layui-bg-black">

@@ -1,5 +1,7 @@
 package cn.akira.pojo;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,11 +14,12 @@ public class UserInfo implements Serializable {
     /**
      * 性别(0或null:未设置, 1:男, 2:女, 3:其他性别, 4:保密)
      */
-    private Integer gender;
+    private String gender;
 
     /**
      * 出生日期
      */
+    @JSONField(format = "yyyy-MM-dd")
     private Date birthday;
 
     /**
@@ -42,6 +45,7 @@ public class UserInfo implements Serializable {
     /**
      * 注册时间(不可修改)
      */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date regDate;
 
     private static final long serialVersionUID = 1L;
@@ -54,11 +58,11 @@ public class UserInfo implements Serializable {
         this.id = id;
     }
 
-    public Integer getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Integer gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 

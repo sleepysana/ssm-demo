@@ -12,6 +12,7 @@
         <!--方法耗时统计拦截器-->
         <mvc:interceptor>
             <mvc:mapping path="/**/*"/>
+            <mvc:exclude-mapping path="/static/**/*"/>
             <bean class="cn.akira.interceptor.MethodTimerInterceptor"/>
         </mvc:interceptor>
 
@@ -22,9 +23,10 @@
             <!--排除这些URI,(不拦截这些URI)-->
             <mvc:exclude-mapping path="/user/login"/>
             <mvc:exclude-mapping path="/user/login.do"/>
-            <mvc:exclude-mapping path="/init"/>
+            <mvc:exclude-mapping path="/check"/>
             <mvc:exclude-mapping path="/static/**/*"/>
             <bean class="cn.akira.interceptor.SessionInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+    <mvc:resources mapping="/**" location="static"/>
 </beans>

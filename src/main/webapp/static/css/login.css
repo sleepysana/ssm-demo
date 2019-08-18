@@ -349,15 +349,9 @@ iframe {
 }
 
 .login100-form-btn:hover {
+  cursor: pointer;
   background: #333333;
 }
-
-
-
-/*------------------------------------------------------------------
-[ Responsive ]*/
-
-
 
 @media (max-width: 992px) {
   .wrap-login100 {
