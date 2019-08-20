@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.akira.mapper.UserRealNameAuthMapper">
+  <resultMap id="BaseResultMap" type="cn.akira.pojo.UserRealNameAuth">
+    <!--@mbg.generated-->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="cid" jdbcType="VARCHAR" property="cid" />
+    <result column="cert_type" jdbcType="VARCHAR" property="certType" />
+  </resultMap>
+  <insert id="insert" parameterType="cn.akira.pojo.UserRealNameAuth">
+    <!--@mbg.generated-->
+    insert into user_real_name_auth (id, real_name, cid, 
+      cert_type)
+    values (#{id,jdbcType=INTEGER}, #{realName,jdbcType=VARCHAR}, #{cid,jdbcType=VARCHAR}, 
+      #{certType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.akira.pojo.UserRealNameAuth">
+    <!--@mbg.generated-->
+    insert into user_real_name_auth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="certType != null">
+        cert_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="certType != null">
+        #{certType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

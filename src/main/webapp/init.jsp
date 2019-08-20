@@ -23,7 +23,7 @@
     });
 
     function random() {
-        var x = 6000;
+        var x = 2000;
         var y = 300;
         return parseInt(Math.random() * (x - y + 1) + y);
     }
@@ -33,12 +33,12 @@
         $.ajax({
             type: "get",
             url: "${path}/check",
-            dataType: "text",
+            dataType: "json",
             async: "false",
             success: function (data) {
                 console.log(data);
                 setTimeout(function () {
-                    window.location.href = data;
+                    window.location.href = data.resource;
                 },random());
             },
             error: function (e) {

@@ -39,6 +39,11 @@ public class CommonData implements Serializable {
         this.resource = resource;
     }
 
+    public CommonData(Object resource,boolean flag) {
+        this.flag = flag;
+        this.resource = resource;
+    }
+
     public String getMessage() {
         return message;
     }

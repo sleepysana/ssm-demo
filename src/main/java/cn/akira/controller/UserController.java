@@ -3,8 +3,8 @@ package cn.akira.controller;
 import cn.akira.pojo.User;
 import cn.akira.service.UserService;
 import cn.akira.util.CastUtil;
-import cn.akira.util.LayuiTableData;
 import cn.akira.util.CommonData;
+import cn.akira.util.LayuiTableData;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -57,7 +57,7 @@ public class UserController {
         } else {
             System.out.println("用户名或密码不正确");
             CommonData result = new CommonData();
-            result.setResource(request.getContextPath() + "/login");
+            result.setResource(request.getContextPath() + "/user/login");
             result.setFlag(false);
             return result;
         }
@@ -101,7 +101,6 @@ public class UserController {
             return null;
         }
     }
-
 
     @RequestMapping("listUser3")
     @ResponseBody

@@ -1,5 +1,6 @@
 package cn.akira.controller;
 
+import cn.akira.util.CommonData;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,18 +12,21 @@ import javax.servlet.http.HttpServletRequest;
 public class MainController {
 
     @RequestMapping("index")
-    public String toIndexPage(){
+    public String toIndexPage() {
         return "index";
     }
 
     @RequestMapping("check")
     @ResponseBody
-    public String checkSession(HttpServletRequest request) {
+    public CommonData checkSession(HttpServletRequest request) {
+        CommonData commonData = new CommonData();
         Object userSession = request.getSession().getAttribute("SESSION_USER");
         if (userSession == null) {
-            return  request.getContextPath()+"/user/login";
+            commonData.setResource(request.getContextPath() + "/user/login");
+            return commonData;
         }
-        return  request.getContextPath()+"/index";
+        commonData.setResource(request.getContextPath() + "/index");
+        return commonData;
     }
 
     @RequestMapping("welcome")
@@ -34,5 +38,4 @@ public class MainController {
     public String toFileUploadPage() {
         return "file/fileUpload";
     }
-
 }

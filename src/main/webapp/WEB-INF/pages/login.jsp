@@ -72,7 +72,6 @@
         var bindEmail = $("#bindEmail").val();
         var password = $("#password").val();
         Notiflix.Loading.Circle();
-        setTimeout(function () {
             $.ajax({
                 type: "POST",
                 url: "${path}/user/doLogin",
@@ -89,11 +88,10 @@
                     console.error("请求错误",e);
                 }
             })
-        },random());
     });
 
     function random() {
-        var x = 3000;
+        var x = 1000;
         var y = 300;
         return parseInt(Math.random() * (x - y + 1) + y);
     }

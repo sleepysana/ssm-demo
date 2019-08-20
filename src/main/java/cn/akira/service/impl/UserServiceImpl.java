@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 
-@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "UnnecessaryLocalVariable"})
+@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "UnnecessaryLocalVariable", "RedundantThrows"})
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
