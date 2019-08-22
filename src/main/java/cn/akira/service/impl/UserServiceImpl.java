@@ -8,8 +8,8 @@ import cn.akira.pojo.User;
 import cn.akira.pojo.UserInfo;
 import cn.akira.pojo.UserRealNameAuth;
 import cn.akira.pojo.UserRole;
+import cn.akira.returnable.CommonData;
 import cn.akira.service.UserService;
-import cn.akira.util.CommonData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,4 +71,22 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public CommonData deleteUsers(List<Integer> ids) throws Exception {
+        if (ids.size() == 0) {
+            return new CommonData("没有选择任何数据", false);
+        }
+        try {
+            int effectRows = 0;
+            for (Integer id : ids) {
+                effectRows += userMapper.deleteUserById(id);
+            }
+            if (effectRows == 0) {
+                return new CommonData("没有数据被删除", false);
+            }
+            return new CommonData("删除了" + effectRows + "条数据");
+        } catch (Exception e) {
+            return new CommonData("批量删除失败", e);
+        }
+    }
 }

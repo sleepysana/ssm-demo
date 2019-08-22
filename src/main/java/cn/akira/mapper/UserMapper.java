@@ -12,4 +12,6 @@ public interface UserMapper {
     List<User> queryAllBaseInfo();
 
     int insert(User user);
+
+    int deleteUserById(int id);
 }

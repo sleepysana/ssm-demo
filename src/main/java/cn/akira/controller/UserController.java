@@ -3,19 +3,21 @@ package cn.akira.controller;
 import cn.akira.pojo.User;
 import cn.akira.service.UserService;
 import cn.akira.util.CastUtil;
-import cn.akira.util.CommonData;
-import cn.akira.util.LayuiTableData;
+import cn.akira.returnable.CommonData;
+import cn.akira.returnable.LayuiTableData;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
@@ -139,6 +141,16 @@ public class UserController {
             model.addAttribute("errInfo", errData.getErrInfo().replace("\n","<br>"));
             model.addAttribute("errDetail", errData.getErrDetail().replace("\n","<br>"));
             return "businessResult/error";
+        }
+    }
+
+    @RequestMapping("deleteUser")
+    @ResponseBody
+    public CommonData deleteUser( @RequestParam("ids[]") List<Integer> ids){
+        try {
+            return userService.deleteUsers(ids);
+        }catch (Exception e){
+            return new CommonData("批量删除失败了",false);
         }
     }
 

@@ -23,9 +23,8 @@
             <result column="id" property="id"/>
             <result column="role" property="role"/>
         </association>
-<!--        <association property=""-->
+        <!--        <association property=""-->
     </resultMap>
-
 
     <select id="queryUser" resultType="cn.akira.pojo.User">
         SELECT *
@@ -43,6 +42,7 @@
             AND password = #{password}
         </where>
     </select>
+
     <select id="queryAllBaseInfo" resultMap="user">
         SELECT u.id,
                u.uname,
@@ -52,7 +52,9 @@
                ui.addr
         FROM user u
                  LEFT JOIN user_info ui ON u.id = ui.id
+        ORDER BY u.id
     </select>
+
     <delete id="insert">
         INSERT INTO user (uname, bind_email, bind_phone, password)
         VALUES (
@@ -61,5 +63,8 @@
         #{bindPhone},
         #{password}
         )
+    </delete>
+    <delete id="deleteUserById">
+        DELETE FROM user WHERE id = #{id} AND id NOT IN (SELECT id FROM user_role WHERE role=99)
     </delete>
 </mapper>

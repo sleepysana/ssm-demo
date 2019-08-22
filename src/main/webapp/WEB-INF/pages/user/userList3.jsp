@@ -1,4 +1,4 @@
-<%--suppress HtmlUnknownAttribute --%>
+<%--suppress HtmlUnknownAttribute,JSValidateJSDoc,JSUnresolvedVariable --%>
 <%--
   Created by IntelliJ IDEA.
   User: akira
@@ -17,22 +17,19 @@
     <link rel="stylesheet" href="${path}/static/css/layui/layui.css" media="all">
 </head>
 <body>
-
 <table id="userList" lay-filter="userListLayFilter" style="height: 100%"></table>
 <%--lay-filter ： 事件过滤器（公用属性），主要用于事件的精确匹配，跟选择器类似
 --%>
-
 <div class="layui-btn-group getSelectedRowDetail">
     <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
     <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
     <button class="layui-btn" data-type="isAll">验证是否全选</button>
 </div>
 <script src="${path}/static/js/layui/layui.js"></script>
-<%--suppress JSValidateJSDoc --%>
 <script>
     layui.use('table', function () {
         var table = layui.table;
-
+        // var layer = layui.layer;
         /**
          * 表格参数配置开始
          */
@@ -44,7 +41,7 @@
             method: "POST",
             toolbar: 'default',
             loading: true,
-            height: 'full',
+            height: 'full-58',
             url: '${path}/user/listUser3', //数据接口
             page: true,  //开启分页
             cols: [[ //表头
@@ -100,9 +97,9 @@
                 case 'add':
                     layer.open({
                         type: 2,
-                        moveOut:true,
-                        scrollbar:false,
-                        maxmin:true,
+                        moveOut: true,
+                        scrollbar: false,
+                        maxmin: true,
                         title: '添加一个用户',
                         closeBtn: 1,
                         area: ['70%', '95%'],
@@ -113,7 +110,50 @@
                     layer.alert("编辑");
                     break;
                 case 'delete':
-                    layer.alert("删除");
+                    // layer.alert("删除");
+                    var selectedData = table.checkStatus("userListData").data;
+                    if (selectedData.length < 1) {
+                        layer.alert("你没有选择任何数据");
+                        return;
+                    }
+                    var ids = [];
+                    for (var i = 0; i < selectedData.length; i++) {
+                        ids[i] = selectedData[i].id
+                    }
+                    layer.confirm('确定要删除这些吗', {
+                            btn: ['当然', '再考虑'] //可以无限个按钮
+                        },
+                        function (index) {
+                            layer.close(index);
+                            layer.load(1);
+                            $.ajax({
+                                type: "post",
+                                url: "${path}/user/deleteUser",
+                                data: {"ids": ids},
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.flag) {
+                                        layer.close(layer.index);
+                                        layer.alert(data.message, {
+                                            yes: function () {
+                                                tableIns.reload();
+                                                layer.close(layer.index);
+                                            }
+                                        });
+                                    } else {
+                                        layer.close(layer.index);
+                                        layer.alert(data.message);
+                                    }
+                                }, error: function (e) {
+                                    console.log(e);
+                                    layer.close(layer.index);
+                                    layer.alert("请求失败了");
+                                }
+                            });
+                        },
+                        function (index) {
+                            layer.close(index);
+                        });
                     break;
                 default:
                     layer.alert("我不知道你点的是什么鬼玩意");
@@ -121,7 +161,6 @@
             }
         })
     });
-
 </script>
 </body>
 </html>

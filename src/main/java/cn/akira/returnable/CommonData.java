@@ -1,4 +1,4 @@
-package cn.akira.util;
+package cn.akira.returnable;
 
 import java.io.Serializable;
 import java.util.Arrays;

@@ -1,6 +1,6 @@
 package cn.akira.controller;
 
-import cn.akira.util.CommonData;
+import cn.akira.returnable.CommonData;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

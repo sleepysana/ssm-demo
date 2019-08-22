@@ -1,4 +1,4 @@
-package cn.akira.util;
+package cn.akira.returnable;
 
 public class LayuiTableData {
     private Integer code = 0;
