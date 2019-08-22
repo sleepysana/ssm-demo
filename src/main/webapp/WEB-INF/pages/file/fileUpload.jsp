@@ -12,8 +12,8 @@
 <html>
 <head>
     <title>文件上传</title>
-    <link href="${path}/static/css/layui.css" rel="stylesheet">
-    <script src="${path}/static/js/layui.js" type="text/javascript"></script>
+    <link href="${path}/static/css/layui/layui.css" rel="stylesheet">
+    <script src="${path}/static/js/layui/layui.js" type="text/javascript"></script>
 </head>
 <body>
 <h3>单文件上传</h3>

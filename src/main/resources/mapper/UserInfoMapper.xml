@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.akira.mapper.UserInfoMapper">
-  <resultMap id="UserInfo" type="cn.akira.pojo.UserInfo">
-    <!--@mbg.generated-->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="gender" jdbcType="INTEGER" property="gender" />
-    <result column="birthday" jdbcType="INTEGER" property="birthday" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="tel" jdbcType="VARCHAR" property="tel" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="addr" jdbcType="VARCHAR" property="addr" />
-    <result column="reg_date" jdbcType="TIMESTAMP" property="regDate" />
-  </resultMap>
+    <resultMap id="UserInfo" type="cn.akira.pojo.UserInfo">
+        <!--@mbg.generated-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
+        <result column="birthday" jdbcType="INTEGER" property="birthday"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="addr" jdbcType="VARCHAR" property="addr"/>
+        <result column="reg_date" jdbcType="TIMESTAMP" property="regDate"/>
+    </resultMap>
 
     <select id="queryBaseInfo" resultType="cn.akira.pojo.UserInfo">
-<!--        SELECT gender,birthday,tel,addr FROM user_info WHERE user_info.id= user.id;-->
+        <!--        SELECT gender,birthday,tel,addr FROM user_info WHERE user_info.id= user.id;-->
     </select>
+    <insert id="insert">
+        INSERT INTO user_info(id, gender,birthday, phone, tel, email, addr, reg_date) VALUES
+        ( #{id},#{gender},#{birthday},#{phone},#{tel},#{email},#{addr},SYSDATE() )
+    </insert>
 </mapper>

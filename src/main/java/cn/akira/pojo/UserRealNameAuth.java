@@ -2,7 +2,7 @@ package cn.akira.pojo;
 
 import java.io.Serializable;
 
-@SuppressWarnings("StringBufferReplaceableByString")
+
 public class UserRealNameAuth implements Serializable {
     /**
     * 用户ID
@@ -23,8 +23,6 @@ public class UserRealNameAuth implements Serializable {
     * 证件类型(预留用的)
     */
     private String certType;
-
-    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
@@ -60,15 +58,11 @@ public class UserRealNameAuth implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", realName=").append(realName);
-        sb.append(", cid=").append(cid);
-        sb.append(", certType=").append(certType);
-        sb.append("]");
-        return sb.toString();
+        return "UserRealNameAuth{" +
+                "id=" + id +
+                ", realName='" + realName + '\'' +
+                ", cid='" + cid + '\'' +
+                ", certType='" + certType + '\'' +
+                '}';
     }
 }

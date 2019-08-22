@@ -3,6 +3,7 @@ package cn.akira.util;
 import java.io.Serializable;
 import java.util.Arrays;
 
+@SuppressWarnings("unused")
 public class CommonData implements Serializable {
     private String message = null;
     private boolean flag = true;

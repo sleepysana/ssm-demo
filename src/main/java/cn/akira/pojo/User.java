@@ -2,25 +2,26 @@ package cn.akira.pojo;
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class User implements Serializable {
     /**
-    * 用户id  主键
-    */
+     * 用户id  主键
+     */
     private Integer id;
 
     /**
-    * 用户名(可用作登录凭据)
-    */
+     * 用户名(可用作登录凭据)
+     */
     private String uname;
 
     /**
-    * 绑定邮箱(可用作登录凭据)
-    */
+     * 绑定邮箱(可用作登录凭据)
+     */
     private String bindEmail;
 
     /**
-    * 绑定的电话号码(可用作登录凭据)
-    */
+     * 绑定的电话号码(可用作登录凭据)
+     */
     private String bindPhone;
 
     /**
@@ -34,9 +35,14 @@ public class User implements Serializable {
     private UserRole role;
 
     /**
-    * 密码(已加密)
-    */
+     * 密码(已加密)
+     */
     private String password;
+
+    /**
+     * 实名信息
+     */
+    private UserRealNameAuth realNameAuth;
 
     public Integer getId() {
         return id;
@@ -59,7 +65,11 @@ public class User implements Serializable {
     }
 
     public void setBindEmail(String bindEmail) {
-        this.bindEmail = bindEmail;
+        if (bindEmail.replace(" ", "").equals("")) {
+            this.bindEmail = null;
+        } else {
+            this.bindEmail = bindEmail;
+        }
     }
 
     public String getBindPhone() {
@@ -67,7 +77,11 @@ public class User implements Serializable {
     }
 
     public void setBindPhone(String bindPhone) {
-        this.bindPhone = bindPhone;
+        if (bindPhone.replace(" ", "").equals("")) {
+            this.bindPhone = null;
+        } else {
+            this.bindPhone = bindPhone;
+        }
     }
 
     public String getPassword() {
@@ -94,6 +108,14 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    public UserRealNameAuth getRealNameAuth() {
+        return realNameAuth;
+    }
+
+    public void setRealNameAuth(UserRealNameAuth realNameAuth) {
+        this.realNameAuth = realNameAuth;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -101,7 +123,10 @@ public class User implements Serializable {
                 ", uname='" + uname + '\'' +
                 ", bindEmail='" + bindEmail + '\'' +
                 ", bindPhone='" + bindPhone + '\'' +
+                ", userInfo=" + userInfo +
+                ", role=" + role +
                 ", password='" + password + '\'' +
+                ", realNameAuth=" + realNameAuth +
                 '}';
     }
 }

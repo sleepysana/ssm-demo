@@ -1,6 +1,7 @@
 package cn.akira.service;
 
 import cn.akira.pojo.User;
+import cn.akira.util.CommonData;
 
 import java.util.List;
 import java.util.Map;
@@ -16,5 +17,7 @@ public interface UserService {
     User getUser(User user) throws Exception;
 
     List<User> getUserBaseInfoList() throws Exception;
+
+    CommonData createUser(User user) throws  Exception;
 }
 

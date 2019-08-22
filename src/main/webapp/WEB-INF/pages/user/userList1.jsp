@@ -12,9 +12,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <script src="${path}/static/js/jquery-3.4.1.min.js"></script>
-    <script src="${path}/static/js/layui.js"></script>
-    <link href="${path}/static/css/layui.css" rel="stylesheet">
+    <script src="${path}/static/js/common/jquery-3.4.1.min.js"></script>
+    <script src="${path}/static/js/layui/layui.js"></script>
+    <link href="${path}/static/css/layui/layui.css" rel="stylesheet">
     <title>用户列表</title>
 </head>
 <body>

@@ -1,21 +1,21 @@
 package cn.akira.mapper;
 
-import cn.akira.pojo.UserRealNameAuth;
+import cn.akira.pojo.UserRole;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface UserRealNameAuthMapper {
+public interface UserRoleMapper {
     /**
      * insert record to table
-     * @param userRealNameAuth the record
+     * @param userRole the record
      * @return insert count
      */
-    int insert(UserRealNameAuth userRealNameAuth);
+    int insert(UserRole userRole);
 
     /**
      * insert record to table selective
      * @param record the record
      * @return insert count
      */
-    int insertSelective(UserRealNameAuth record);
+    int insertSelective(UserRole record);
 }

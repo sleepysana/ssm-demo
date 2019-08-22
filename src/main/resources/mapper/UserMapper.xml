@@ -19,6 +19,11 @@
             <result column="addr" property="addr"/>
             <result column="reg_date" property="regDate"/>
         </association>
+        <association property="role" javaType="cn.akira.pojo.UserRole">
+            <result column="id" property="id"/>
+            <result column="role" property="role"/>
+        </association>
+<!--        <association property=""-->
     </resultMap>
 
 
@@ -48,4 +53,13 @@
         FROM user u
                  LEFT JOIN user_info ui ON u.id = ui.id
     </select>
+    <delete id="insert">
+        INSERT INTO user (uname, bind_email, bind_phone, password)
+        VALUES (
+        #{uname},
+        #{bindEmail},
+        #{bindPhone},
+        #{password}
+        )
+    </delete>
 </mapper>

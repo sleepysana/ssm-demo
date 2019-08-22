@@ -21,7 +21,7 @@ public class SessionInterceptor implements HandlerInterceptor {
         Object userSession = request.getSession().getAttribute("SESSION_USER");
         if (userSession == null) {
             LOGGER.warn("["+request.getRequestURI()+"] 需要登录有相应权限的用户才能进行");
-//            ServletUtil.redirectOutOfIframe(request.getContextPath()+"/login.jsp",response);
+            ServletUtil.redirectOutOfIframe(request.getContextPath()+"/user/login",response);
             return false;
         }
         if (userSession instanceof User) {

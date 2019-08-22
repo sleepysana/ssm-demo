@@ -10,4 +10,6 @@ public interface UserMapper {
     User queryUser(User user);
 
     List<User> queryAllBaseInfo();
+
+    int insert(User user);
 }

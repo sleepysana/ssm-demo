@@ -1,3 +1,4 @@
+<%--suppress JSUnresolvedVariable --%>
 <%--
   Created by IntelliJ IDEA.
   User: akira
@@ -10,9 +11,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <script src="${path}/static/js/jquery-3.4.1.min.js"></script>
-    <script src="${path}/static/js/notiflix-1.3.0.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="${path}/static/css/notiflix-1.3.0.min.css">
+    <script src="${path}/static/js/common/jquery-3.4.1.min.js"></script>
+    <script src="${path}/static/js/common/notiflix-1.3.0.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="${path}/static/css/layui/notiflix-1.3.0.min.css">
     <title>checking...</title>
 </head>
 <%--suppress HtmlDeprecatedAttribute --%>
@@ -23,7 +24,7 @@
     });
 
     function random() {
-        var x = 2000;
+        var x = 1000;
         var y = 300;
         return parseInt(Math.random() * (x - y + 1) + y);
     }

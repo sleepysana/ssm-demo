@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.akira.mapper.UserRoleMapper">
+    <resultMap id="BaseResultMap" type="cn.akira.pojo.UserRole">
+        <!--@mbg.generated-->
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="role" jdbcType="INTEGER" property="role"/>
+    </resultMap>
+    <insert id="insert" parameterType="cn.akira.pojo.UserRole">
+        <!--@mbg.generated-->
+        insert into user_role (id, `role`)
+        values (#{id,jdbcType=INTEGER}, #{role,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.akira.pojo.UserRole">
+        <!--@mbg.generated-->
+        insert into user_role(id, role) VALUES
+        (#{id},#{role})
+    </insert>
+</mapper>

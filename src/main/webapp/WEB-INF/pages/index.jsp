@@ -15,10 +15,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>后台管理模板</title>
-    <script src="${path}/static/js/layui.js"></script>
-    <script src="${path}/static/js/jquery-3.4.1.min.js"></script>
-    <link rel="stylesheet" href="${path}/static/css/layui.css">
-    <link rel="stylesheet" href="${path}/static/css/custom1.css">
+    <script src="${path}/static/js/layui/layui.js"></script>
+    <script src="${path}/static/js/common/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="${path}/static/css/layui/layui.css">
+    <link rel="stylesheet" href="${path}/static/css/layui/custom1.css">
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -86,13 +86,13 @@
     </div>
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <iframe id="mainContent" src="https://www.baidu.com" style="height: 99%; width: 100%" frameborder="0"></iframe>
+        <iframe id="mainContent" src="https://www.baidu.com" style="height: 99.4%; width: 100%" frameborder="0"></iframe>
     </div>
 
-    <div class="layui-footer">
+    <div class="layui-footer" style="height: 40px">
         <!-- 底部固定区域 -->
         @akira
-    </div>
+    </div>t
 </div>
 
 <%--suppress ES6ConvertVarToLetConst --%>

@@ -1,6 +1,8 @@
 package cn.akira.pojo;
 
-public class UserRole {
+import java.io.Serializable;
+
+public class UserRole implements Serializable {
     /**
      * 用户id (主键)
      */
@@ -10,6 +12,8 @@ public class UserRole {
      * 用户角色(-1:未激活)
      */
     private Integer role;
+
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
@@ -29,7 +33,7 @@ public class UserRole {
 
     @Override
     public String toString() {
-        return "UseRole{" +
+        return "UserRole{" +
                 "id=" + id +
                 ", role=" + role +
                 '}';

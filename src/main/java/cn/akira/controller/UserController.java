@@ -9,6 +9,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -67,7 +68,7 @@ public class UserController {
     public String userListPage1(Model model) throws Exception {
         List<User> userBaseInfoList = userService.getUserBaseInfoList();
         List<User> users = new ArrayList<>();
-        for(User user:userBaseInfoList){
+        for (User user : userBaseInfoList) {
             users.add(CastUtil.genderCast(user));
         }
         model.addAttribute("userList", users);
@@ -75,12 +76,12 @@ public class UserController {
     }
 
     @RequestMapping("userList2")
-    public String userListPage2(){
+    public String userListPage2() {
         return "user/userList2";
     }
 
     @RequestMapping("userList3")
-    public String userListPage3(){
+    public String userListPage3() {
         return "user/userList3";
     }
 
@@ -95,7 +96,7 @@ public class UserController {
             }
             CommonData commonData = new CommonData();
             commonData.setResource(users);
-            return  commonData;
+            return commonData;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -115,6 +116,29 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @RequestMapping("showAddUser")
+    public String toAddUserPage() {
+        return "user/addUser";
+    }
+
+    @RequestMapping("createUser")
+    public String addUser(@ModelAttribute User user, Model model) {
+        try {
+            user.setPassword(DigestUtils.sha1Hex(user.getPassword()));
+            CommonData commonData = userService.createUser(user);
+            if (commonData.isFlag()) {
+                return "businessResult/success";
+            } else return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            CommonData errData = new CommonData("创建用户时遇到一个错误", false, e);
+            model.addAttribute("message", errData.getMessage().replace("\n","<br>"));
+            model.addAttribute("errInfo", errData.getErrInfo().replace("\n","<br>"));
+            model.addAttribute("errDetail", errData.getErrDetail().replace("\n","<br>"));
+            return "businessResult/error";
         }
     }
 

@@ -1,4 +1,4 @@
-package cn.akira.Util;
+package cn.akira.util;
 
 import org.junit.Test;
 

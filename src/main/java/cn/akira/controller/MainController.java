@@ -38,4 +38,19 @@ public class MainController {
     public String toFileUploadPage() {
         return "file/fileUpload";
     }
+
+    @RequestMapping("test")
+    public String toTestPage(){
+        return "test/test";
+    }
+
+  @RequestMapping("success")
+    public String toSuccessPage(){
+        return "error/success";
+    }
+
+    @RequestMapping("error")
+    public String toErrorPage(){
+        return "error/error";
+    }
 }

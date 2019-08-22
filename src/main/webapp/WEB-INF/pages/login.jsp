@@ -1,11 +1,4 @@
-<%--suppress HtmlUnknownTarget,HtmlFormInputWithoutLabel --%>
-<%--
-  Created by IntelliJ IDEA.
-  User: akira
-  Date: 2019/8/7
-  Time: 21:57
-  To change this template use File | Settings | File Templates.
---%>
+<%--suppress JSUnresolvedVariable,HtmlFormInputWithoutLabel --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set value="${pageContext.request.contextPath}" var="path" scope="page"/>
 <%@ page contentType="text/html;charset=UTF-8" %>
@@ -15,12 +8,12 @@
     <title>登录</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="${path}/static/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="${path}/static/css/login-util.css">
-    <link rel="stylesheet" type="text/css" href="${path}/static/css/login.css">
-    <link rel="stylesheet" href="${path}/static/css/notiflix-1.3.0.min.css">
-    <script src="${path}/static/js/jquery-3.4.1.min.js"></script>
-    <script src="${path}/static/js/notiflix-1.3.0.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="${path}/static/css/login/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="${path}/static/css/layui/login-util.css">
+    <link rel="stylesheet" type="text/css" href="${path}/static/css/login/login.css">
+    <link rel="stylesheet" href="${path}/static/css/layui/notiflix-1.3.0.min.css">
+    <script src="${path}/static/js/common/jquery-3.4.1.min.js"></script>
+    <script src="${path}/static/js/common/notiflix-1.3.0.min.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -28,7 +21,7 @@
     <div class="container-login100">
         <div class="wrap-login100">
             <div class="login100-pic js-tilt" data-tilt>
-                <img src="${path}/static/images/img-01.png" alt="IMG">
+                <img src="${path}/static/image/login/loginicon.png" alt="IMG">
             </div>
             <form class="login100-form validate-form">
                 <span class="login100-form-title">登录</span>
@@ -89,11 +82,5 @@
                 }
             })
     });
-
-    function random() {
-        var x = 1000;
-        var y = 300;
-        return parseInt(Math.random() * (x - y + 1) + y);
-    }
 </script>
 </html>
