@@ -67,4 +67,13 @@
     <delete id="deleteUserById">
         DELETE FROM user WHERE id = #{id} AND id NOT IN (SELECT id FROM user_role WHERE role=99)
     </delete>
+    <select id="queryUserByUname" resultMap="user">
+        SELECT * FROM user WHERE uname = #{uname}
+    </select>
+    <select id="queryUserByBindPhone" resultMap="user">
+        SELECT id FROM user WHERE bind_phone=#{bindPhone}
+    </select>
+    <select id="queryUserByBindEmail" resultMap="user">
+        SELECT id FROM user WHERE bind_email  =#{bindEmail}
+    </select>
 </mapper>

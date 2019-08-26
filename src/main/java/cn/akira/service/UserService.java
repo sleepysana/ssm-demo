@@ -20,5 +20,7 @@ public interface UserService {
     CommonData createUser(User user) throws  Exception;
 
     CommonData deleteUsers(List<Integer> ids)  throws Exception;
+
+    CommonData getUserByUname(String uname) throws Exception;
 }
 

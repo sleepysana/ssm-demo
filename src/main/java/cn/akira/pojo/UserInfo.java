@@ -64,7 +64,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setGender(String gender) {
-        this.gender = gender;
+        this.gender = gender.replace(" ", "").equals("")?null:gender;
     }
 
     public Date getBirthday() {
@@ -80,7 +80,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.phone = phone.replace(" ", "").equals("")?null:phone;
     }
 
     public String getTel() {
@@ -88,7 +88,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setTel(String tel) {
-        this.tel = tel;
+        this.tel = tel.replace(" ", "").equals("")?null:tel;
     }
 
     public String getEmail() {
@@ -96,7 +96,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.replace(" ", "").equals("")?null:email;
     }
 
     public String getAddr() {
@@ -104,7 +104,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setAddr(String addr) {
-        this.addr = addr;
+        this.addr = addr.replace(" ", "").equals("")?null:addr;
     }
 
     public Date getRegDate() {

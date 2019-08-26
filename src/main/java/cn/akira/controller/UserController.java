@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
@@ -127,30 +126,101 @@ public class UserController {
     }
 
     @RequestMapping("createUser")
-    public String addUser(@ModelAttribute User user, Model model) {
+    @ResponseBody
+    public CommonData createUser(
+            @ModelAttribute User user,
+            @RequestParam("rePassword") String rePassword) {
+        String emailReg = "^[a-z0-9A-Z]+[-|a-z0-9A-Z._]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$";
+        String chineseMainLandPhoneReg = "^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\\d{8}$";
+        String uname = user.getUname();
+        String bindPhone = user.getBindPhone();
+        String bindEmail = user.getBindEmail();
+        String password = user.getPassword();
+        String email = user.getUserInfo().getEmail();
+        String addr = user.getUserInfo().getAddr();
+        String realName = user.getRealNameAuth().getRealName();
+        String cid = user.getRealNameAuth().getCid();
+        String certType = user.getRealNameAuth().getCertType();
+        if (uname == null) {
+            return new CommonData("用户名是必填的哦~", "uname",false);
+        } else if (uname.length() < 3) {
+            return new CommonData("用户名至少3个字符", "uname",false);
+        } else if (uname.contains(" ") || uname.contains("@")) {
+            return new CommonData("用户名不能有空格或者艾特符","uname", false);
+        }else if (uname.matches(chineseMainLandPhoneReg)){
+            return new CommonData("不要用疑似手机号格式的用户名嘛","uname", false);
+        }
+
+        if (bindPhone == null && bindEmail == null) {
+            return new CommonData("邮箱和手机至少得绑一个吧", false);
+        }
+
+        if (bindPhone != null && !bindPhone.matches(chineseMainLandPhoneReg)) {
+            return new CommonData("手机号格式不对","bindPhone", false);
+        }
+
+        if (bindEmail != null && !bindEmail.matches(emailReg)) {
+            return new CommonData("邮箱格式没写对", "bindEmail",false);
+        }
+
+        // 密码校验
+        if (password.replace(" ", "").equals("")) {
+            return new CommonData("密码没输", "password", false);
+        } else if (password.contains(" ")) {
+            return new CommonData("你不能设置有空格的密码", "password", false);
+        } else if (!password.matches("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$")) {
+            return new CommonData("密码要有英文字母和数字，而且长度至少是6位，最多20位", "password", false);
+        } else if (!password.equals(rePassword)) {
+            return new CommonData("两次输入的密码都不一样,你要搞哪样嘛", "rePassword", false);
+        }
+
+        if (email != null && !email.matches(emailReg)) {
+            return new CommonData("邮箱格式不正确", "email", false);
+        }
+        if (addr != null && (addr.replace(" ", "").length() < 5)) {
+            return new CommonData("地址写详细点嘛", "addr", false);
+        }
+        if (!((/*都为空*/
+                realName == null &&
+                        cid == null &&
+                        certType == null
+        ) || (/*都不为空*/
+                realName != null &&
+                        cid != null &&
+                        certType != null
+        ))) {
+            return new CommonData("如需实名信息,就请将其完善", false);
+        } else if (cid != null && certType.equals("1") && !cid.matches("^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X|x)$")) {
+            return new CommonData("身份证格式不对", "cid", false);
+        }
+
         try {
             user.setPassword(DigestUtils.sha1Hex(user.getPassword()));
-            CommonData commonData = userService.createUser(user);
-            if (commonData.isFlag()) {
-                return "businessResult/success";
-            } else return null;
+            return userService.createUser(user);
         } catch (Exception e) {
             e.printStackTrace();
-            CommonData errData = new CommonData("创建用户时遇到一个错误", false, e);
-            model.addAttribute("message", errData.getMessage().replace("\n","<br>"));
-            model.addAttribute("errInfo", errData.getErrInfo().replace("\n","<br>"));
-            model.addAttribute("errDetail", errData.getErrDetail().replace("\n","<br>"));
-            return "businessResult/error";
+            return new CommonData("创建用户时遇到一个错误", e);
         }
     }
 
     @RequestMapping("deleteUser")
     @ResponseBody
-    public CommonData deleteUser( @RequestParam("ids[]") List<Integer> ids){
+    public CommonData deleteUser(@RequestParam("ids[]") List<Integer> ids) {
         try {
             return userService.deleteUsers(ids);
-        }catch (Exception e){
-            return new CommonData("批量删除失败了",false);
+        } catch (Exception e) {
+            return new CommonData("批量删除失败了", false);
+        }
+    }
+
+    @RequestMapping("checkUsername")
+    @ResponseBody
+    public CommonData checkUsername(@RequestParam("uname") String uname) {
+        try {
+            return userService.getUserByUname(uname);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new CommonData("检查用户名占用时发生异常", e);
         }
     }
 

@@ -29,9 +29,11 @@ public class CommonData implements Serializable {
         this.errDetail = Arrays.toString(e.getStackTrace());
     }
 
-    public CommonData(String message, Object resource) {
+    public CommonData(String message, Exception e) {
+        this.flag = false;
         this.message = message;
-        this.resource = resource;
+        this.errInfo=e.getLocalizedMessage();
+        this.errDetail=Arrays.toString(e.getStackTrace());
     }
 
     public CommonData(String message, Object resource, boolean flag) {

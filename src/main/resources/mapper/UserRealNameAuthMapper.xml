@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.akira.mapper.UserRealNameAuthMapper">
   <resultMap id="BaseResultMap" type="cn.akira.pojo.UserRealNameAuth">
-    <!--@mbg.generated-->
     <result column="id" jdbcType="INTEGER" property="id" />
     <result column="real_name" jdbcType="VARCHAR" property="realName" />
     <result column="cid" jdbcType="VARCHAR" property="cid" />
@@ -47,4 +46,7 @@
       </if>
     </trim>
   </insert>
+  <select id="queryInfoByCidAndCertType" resultMap="BaseResultMap">
+    SELECT id FROM user_real_name_auth WHERE cid = #{param1} AND cert_type = #{param2}
+  </select>
 </mapper>

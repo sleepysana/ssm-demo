@@ -99,11 +99,14 @@
                         type: 2,
                         moveOut: true,
                         scrollbar: false,
-                        maxmin: true,
                         title: '添加一个用户',
                         closeBtn: 1,
-                        area: ['70%', '95%'],
-                        content: '${path}/user/showAddUser'
+                        area: ['80%', '100%'],
+                        <%--content: '${path}/user/showAddUser'--%>
+                        content: '${path}/user/showAddUser',
+                        end:function () {
+                            tableIns.reload();
+                        }
                     });
                     break;
                 case 'update':

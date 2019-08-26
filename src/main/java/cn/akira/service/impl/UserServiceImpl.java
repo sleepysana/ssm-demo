@@ -46,6 +46,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonData createUser(User user) throws Exception {
+        if (userMapper.queryUserByUname(user.getUname()) != null) {
+            return new CommonData("这个用户名已经被注册过了啊", "uname", false);
+        }
+        if (userMapper.queryUserByBindEmail(user.getBindEmail()) != null) {
+            return new CommonData("这个邮箱已经被注册过了啊", "bindEmail", false);
+        }
+        if (userMapper.queryUserByBindPhone(user.getBindPhone()) != null) {
+            return new CommonData("这个手机号已经被注册过了啊", "bindPhone", false);
+        }
+        if (userRealNameAuthMapper.queryInfoByCidAndCertType(
+                user.getRealNameAuth().getCid(),
+                user.getRealNameAuth().getCertType()
+        ) != null) {
+            return new CommonData("这个证件号码已经被认证过了啊", "cid", false);
+        }
         int effectRow1 = userMapper.insert(user);
         User insertedUser = userMapper.queryUser(user);
         Integer id = insertedUser.getId();
@@ -88,5 +103,12 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             return new CommonData("批量删除失败", e);
         }
+    }
+
+    @Override
+    public CommonData getUserByUname(String uname) throws Exception {
+        if (userMapper.queryUserByUname(uname) != null) {
+            return new CommonData("这个用户名已经被注册过了啊", false);
+        } else return new CommonData();
     }
 }

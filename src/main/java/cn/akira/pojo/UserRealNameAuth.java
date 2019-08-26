@@ -37,7 +37,7 @@ public class UserRealNameAuth implements Serializable {
     }
 
     public void setRealName(String realName) {
-        this.realName = realName;
+        this.realName = realName.replace(" ", "").equals("") ?null:realName;
     }
 
     public String getCid() {
@@ -45,7 +45,7 @@ public class UserRealNameAuth implements Serializable {
     }
 
     public void setCid(String cid) {
-        this.cid = cid;
+        this.cid = cid.replace(" ", "").equals("")?null:cid;
     }
 
     public String getCertType() {
@@ -53,7 +53,7 @@ public class UserRealNameAuth implements Serializable {
     }
 
     public void setCertType(String certType) {
-        this.certType = certType;
+        this.certType = certType.replace(" ", "").equals("")?null:certType;
     }
 
     @Override

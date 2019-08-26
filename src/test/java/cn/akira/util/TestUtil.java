@@ -13,4 +13,9 @@ public class TestUtil {
         String result = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(timeStamp);
         System.out.println("13位数的时间戳（毫秒）--->Date:" + result);
     }
+
+    @Test
+    public void thisIsAMethod(){
+        System.out.println("哈哈哈哈".indexOf(" "));
+    }
 }

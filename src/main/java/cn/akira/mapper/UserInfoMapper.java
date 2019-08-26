@@ -8,4 +8,5 @@ public interface UserInfoMapper {
     List<UserInfo> queryBaseInfo();
 
     int insert(UserInfo userInfo);
+
 }

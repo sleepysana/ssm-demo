@@ -25,6 +25,11 @@ public class User implements Serializable {
     private String bindPhone;
 
     /**
+     * 密码(已加密)
+     */
+    private String password;
+
+    /**
      * 用户信息
      */
     private UserInfo userInfo;
@@ -33,11 +38,6 @@ public class User implements Serializable {
      * 用户角色
      */
     private UserRole role;
-
-    /**
-     * 密码(已加密)
-     */
-    private String password;
 
     /**
      * 实名信息
@@ -57,7 +57,7 @@ public class User implements Serializable {
     }
 
     public void setUname(String uname) {
-        this.uname = uname;
+        this.uname = uname.replace(" ","").length()==0?null:uname;
     }
 
     public String getBindEmail() {
@@ -123,9 +123,9 @@ public class User implements Serializable {
                 ", uname='" + uname + '\'' +
                 ", bindEmail='" + bindEmail + '\'' +
                 ", bindPhone='" + bindPhone + '\'' +
+                ", password='" + password + '\'' +
                 ", userInfo=" + userInfo +
                 ", role=" + role +
-                ", password='" + password + '\'' +
                 ", realNameAuth=" + realNameAuth +
                 '}';
     }
