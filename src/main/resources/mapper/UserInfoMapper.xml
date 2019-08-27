@@ -4,6 +4,7 @@
     <resultMap id="UserInfo" type="cn.akira.pojo.UserInfo">
         <!--@mbg.generated-->
         <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="head_icon" property="headIcon"/>
         <result column="gender" jdbcType="INTEGER" property="gender"/>
         <result column="birthday" jdbcType="INTEGER" property="birthday"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
@@ -17,7 +18,7 @@
         <!--        SELECT gender,birthday,tel,addr FROM user_info WHERE user_info.id= user.id;-->
     </select>
     <insert id="insert">
-        INSERT INTO user_info(id, gender,birthday, phone, tel, email, addr, reg_date) VALUES
-        ( #{id},#{gender},#{birthday},#{phone},#{tel},#{email},#{addr},SYSDATE() )
+        INSERT INTO user_info(id, gender,birthday, phone, tel, email, addr, reg_date,head_icon) VALUES
+        ( #{id},#{gender},#{birthday},#{phone},#{tel},#{email},#{addr},SYSDATE(),#{headIcon})
     </insert>
 </mapper>

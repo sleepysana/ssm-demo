@@ -8,9 +8,14 @@ import java.util.Date;
 
 public class UserInfo implements Serializable {
     /**
-     * 用户id(主键)
+     * 用户id
      */
     private Integer id;
+
+    /**
+     * 用户头像
+     */
+    private String headIcon;
 
     /**
      * 性别(0或null:未设置, 1:男, 2:女, 3:其他性别, 4:保密)
@@ -50,6 +55,14 @@ public class UserInfo implements Serializable {
     private Date regDate;
 
     private static final long serialVersionUID = 1L;
+
+    public String getHeadIcon() {
+        return headIcon;
+    }
+
+    public void setHeadIcon(String headIcon) {
+        this.headIcon = headIcon;
+    }
 
     public Integer getId() {
         return id;

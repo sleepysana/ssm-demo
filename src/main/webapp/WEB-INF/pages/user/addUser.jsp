@@ -27,7 +27,6 @@
             -webkit-box-align: center; /*兼容FSafari、Chrome */
             -moz-box-pack: center; /*兼容Firefox*/
             -webkit-box-pack: center; /*兼容FSafari、Chrome */
-            /*background-color: pink;*/
         }
 
         p {
@@ -45,8 +44,10 @@
 <body>
 <form class="layui-form">
     <br>
-    <div class="icon">
-        <img src="http://t.cn/RCzsdCq" style="width: 170px;height: 170px" alt="我觉得你是傻逼">
+    <div class="icon" name="user.UserInfo.headIcon">
+<%--suppress HtmlUnknownTarget --%>
+        <img src="${path}/resource/image/head/default_head_icon.png" id="headIcon" style="width: 170px;height: 170px"
+             alt="我觉得你是傻逼">
     </div>
     <div style="margin:0 0 0 323px;">
         <p>-账户关键信息-</p>
@@ -186,18 +187,43 @@
 <script type="text/javascript" src="${path}/static/js/layui/layui.js"></script>
 <%--suppress JSUnfilteredForInLoop --%>
 <script>
-    var unameFlag = false;
-    layui.use(['form', 'layedit', 'laydate'], function () {
+    layui.use(['form', 'layedit', 'laydate', 'upload'], function () {
         var form = layui.form,
             layer = layui.layer,
-            layedit = layui.layedit,
-            laydate = layui.laydate;
+            laydate = layui.laydate,
+            upload = layui.upload;
         //日期
         laydate.render({
             elem: '#birthday',
             min: '1900-01-01',
             max: getNowFormatDate()
             // show:true
+        });
+
+        // $("#headIcon").click(function () {
+        //     layer.load(1);
+        // });
+
+        upload.render({
+            elem: "#headIcon",
+            url: "${path}/user/headIconUpload",
+            acceptMime: 'image/*',
+            choose:function(){
+                layer.load(1);
+            },
+            done: function (data) {
+                if (data.flag) {
+                    $("#headIcon").attr("src", "${path}/resource/image/head/cache/" + data.resource)
+                } else if(data.errInfo!==null){
+                    goToErrorPage(data);
+                }else{
+                    layer.alert(data.message);
+                }
+                layer.close(layer.index);
+            }, error: function () {
+                layer.alert("上传失败了呀!");
+                layer.close(layer.index);
+            }
         });
 
         /**
@@ -282,13 +308,13 @@
                 return false;
             }
         });
+
         uname.keydown(function () {
             $(this).removeAttr("style");
         });
 
-
-        //aaaaa
         $("#submit").click(function () {
+            var headIconSrc = $("#headIcon").attr("src");
             var uname = $("#uname").val(),
                 role = $("#role").val(),
                 bindPhone = $("#bindPhone").val(),
@@ -300,6 +326,7 @@
                 phone = $("#phone").val(),
                 email = $("#email").val(),
                 addr = $("#addr").val(),
+                headIcon = headIconSrc.substr(headIconSrc.lastIndexOf("/"), headIconSrc.length),
                 realName = $("#realName").val(),
                 cid = $("#cid").val(),
                 certType = $("#certType").val();
@@ -318,6 +345,7 @@
                     "userInfo.phone": phone,
                     "userInfo.email": email,
                     "userInfo.addr": addr,
+                    "userInfo.headIcon": headIcon,
                     "realNameAuth.realName": realName,
                     "realNameAuth.cid": cid,
                     "realNameAuth.certType": certType,
@@ -336,10 +364,9 @@
                         if (data.resource !== null) {
                             $("#" + data.resource).attr("style", "border-color:red;color:red");
                         }
-                        ;
                         if (data.errInfo !== null) {
                             console.log("返回带异常的数据", data)
-                            goToErrorPage("${path}/error", data);
+                            goToErrorPage(data);
                         }
                     } else {
                         var index = parent.layer.getFrameIndex(window.name);
@@ -347,7 +374,6 @@
                         layer.alert(data.message, {
                             end: function () {
                                 layer.closeAll();
-                                // parent.tableIns.reload();
                                 parent.layer.close(index);
                             }
                         });
@@ -396,21 +422,21 @@
             return date.getFullYear() + "-" + month + "-" + strDate
         }
 
-        function goToErrorPage(url, param) {
+        function goToErrorPage(errData) {
             //创建form表单
             var temp_form = document.createElement("form");
-            temp_form.action = url;
+            temp_form.action = "${path}/error";
             //如需打开新窗口，form的target属性要设置为'_blank'
             temp_form.target = "_self";
             temp_form.method = "post";
             temp_form.style.display = "none";
             //添加参数
-             for (var key in param) {
+            for (var key in errData) {
                 var opt = document.createElement("textarea");
                 opt.name = key;
-                opt.value = param[key];
+                opt.value = errData[key];
                 temp_form.appendChild(opt);
-             }
+            }
             document.body.appendChild(temp_form);
             //提交数据
             temp_form.submit();

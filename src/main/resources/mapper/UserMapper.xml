@@ -3,7 +3,6 @@
 <!--suppress ResultMapColumnCheck -->
 <mapper namespace="cn.akira.mapper.UserMapper">
     <resultMap id="user" type="cn.akira.pojo.User">
-        <!--@mbg.generated-->
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="uname" jdbcType="VARCHAR" property="uname"/>
         <result column="bind_email" jdbcType="VARCHAR" property="bindEmail"/>
@@ -11,6 +10,7 @@
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <association property="userInfo" javaType="cn.akira.pojo.UserInfo">
             <id column="id" property="id"/>
+            <result column="head_icon" property="headIcon"/>
             <result column="gender" property="gender"/>
             <result column="birthday" property="birthday"/>
             <result column="phone" property="phone"/>
@@ -23,7 +23,12 @@
             <result column="id" property="id"/>
             <result column="role" property="role"/>
         </association>
-        <!--        <association property=""-->
+       <association property="realNameAuth" javaType="cn.akira.pojo.UserRealNameAuth">
+           <result column="id" property="id"/>
+           <result column="real_name" property="realName"/>
+           <result column="cid" property="cid"/>
+           <result column="cert_type" property="certType"/>
+       </association>
     </resultMap>
 
     <select id="queryUser" resultType="cn.akira.pojo.User">
