@@ -1,6 +1,7 @@
 package cn.akira.mapper;
 
 import cn.akira.pojo.UserInfo;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -8,4 +9,6 @@ public interface UserInfoMapper {
     List<UserInfo> queryBaseInfo();
 
     int insert(UserInfo userInfo);
+
+    String queryHeadIconById(@RequestParam("id") int id);
 }

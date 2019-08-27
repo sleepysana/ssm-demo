@@ -1,7 +1,10 @@
 package cn.akira.controller;
 
+import cn.akira.pojo.User;
 import cn.akira.returnable.CommonData;
+import cn.akira.service.UserService;
 import cn.akira.util.ServletUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,13 +12,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+@SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Controller
 @RequestMapping("/")
 public class MainController {
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("index")
-    public String toIndexPage() {
+    public String toIndexPage(HttpSession session,Model model) {
+        User sessionUser = (User) session.getAttribute("SESSION_USER");
+        try {
+            String iconFile = userService.getUserHeadIcon(sessionUser.getId());
+            model.addAttribute("userHeadIcon",iconFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "index";
     }
 

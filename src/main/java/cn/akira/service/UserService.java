@@ -22,5 +22,7 @@ public interface UserService {
     CommonData deleteUsers(List<Integer> ids)  throws Exception;
 
     CommonData getUserByUname(String uname) throws Exception;
+
+    String getUserHeadIcon(int id) throws Exception;
 }
 

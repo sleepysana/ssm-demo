@@ -42,7 +42,7 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img" alt="这里是图片">
+                    <img src="${path}/resource/image/head/${userHeadIcon}" class="layui-nav-img" alt="头像">
                     ${SESSION_USER.uname}
                 </a>
                 <dl class="layui-nav-child">
@@ -86,13 +86,15 @@
     </div>
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <iframe id="mainContent" src="https://www.baidu.com" style="height: 99.4%; width: 100%" frameborder="0"></iframe>
+        <iframe id="mainContent" src="https://www.baidu.com" style="height: 99.4%; width: 100%"
+                frameborder="0"></iframe>
     </div>
 
     <div class="layui-footer" style="height: 40px">
         <!-- 底部固定区域 -->
         @akira
-    </div>t
+    </div>
+    t
 </div>
 
 <%--suppress ES6ConvertVarToLetConst --%>

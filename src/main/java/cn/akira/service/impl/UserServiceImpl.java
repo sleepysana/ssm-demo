@@ -111,4 +111,9 @@ public class UserServiceImpl implements UserService {
             return new CommonData("这个用户名已经被注册过了啊", false);
         } else return new CommonData();
     }
+
+    @Override
+    public String getUserHeadIcon(int id) throws Exception {
+        return userInfoMapper.queryHeadIconById(id);
+    }
 }

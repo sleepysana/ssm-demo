@@ -21,4 +21,7 @@
         INSERT INTO user_info(id, gender,birthday, phone, tel, email, addr, reg_date,head_icon) VALUES
         ( #{id},#{gender},#{birthday},#{phone},#{tel},#{email},#{addr},SYSDATE(),#{headIcon})
     </insert>
+    <select id="queryHeadIconById" resultType="java.lang.String">
+        SELECT head_icon FROM user_info WHERE id = #{id}
+    </select>
 </mapper>

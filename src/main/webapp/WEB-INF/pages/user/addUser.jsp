@@ -45,7 +45,6 @@
 <form class="layui-form">
     <br>
     <div class="icon" name="user.UserInfo.headIcon">
-<%--suppress HtmlUnknownTarget --%>
         <img src="${path}/resource/image/head/default_head_icon.png" id="headIcon" style="width: 170px;height: 170px"
              alt="我觉得你是傻逼">
     </div>
