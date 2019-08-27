@@ -10,7 +10,8 @@ public class CommonData implements Serializable {
     private String errInfo = null;
     private String errDetail = null;
     private Object resource = null;
-
+    private Integer status = 0;
+    private Object customProp;
     public CommonData() {}
 
     public CommonData(String message) {
@@ -85,6 +86,22 @@ public class CommonData implements Serializable {
 
     public void setResource(Object resource) {
         this.resource = resource;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Object getCustomProp() {
+        return customProp;
+    }
+
+    public void setCustomProp(Object customProp) {
+        this.customProp = customProp;
     }
 
     @Override

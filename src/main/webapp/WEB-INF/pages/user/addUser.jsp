@@ -174,7 +174,7 @@
             </div>
         </div>
     </div>
-    <div class="layui-form-item" style="text-align: center;margin-top: 30px;width: 947px">
+    <div class="layui-form-item" style="text-align: center;bottom: 4px;width: 100%;position: fixed">
         <div class="layui-input-block" style="margin: auto">
             <button type="button" class="layui-btn" id="submit">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -207,15 +207,15 @@
             elem: "#headIcon",
             url: "${path}/user/headIconUpload",
             acceptMime: 'image/*',
-            choose:function(){
+            choose: function () {
                 layer.load(1);
             },
             done: function (data) {
                 if (data.flag) {
                     $("#headIcon").attr("src", "${path}/resource/image/head/cache/" + data.resource)
-                } else if(data.errInfo!==null){
+                } else if (data.errInfo !== null) {
                     goToErrorPage(data);
-                }else{
+                } else {
                     layer.alert(data.message);
                 }
                 layer.close(layer.index);
@@ -325,7 +325,7 @@
                 phone = $("#phone").val(),
                 email = $("#email").val(),
                 addr = $("#addr").val(),
-                headIcon = headIconSrc.substr(headIconSrc.lastIndexOf("/"), headIconSrc.length),
+                headIcon = headIconSrc.substr(headIconSrc.lastIndexOf("/") + 1, headIconSrc.length),
                 realName = $("#realName").val(),
                 cid = $("#cid").val(),
                 certType = $("#certType").val();
@@ -364,7 +364,7 @@
                             $("#" + data.resource).attr("style", "border-color:red;color:red");
                         }
                         if (data.errInfo !== null) {
-                            console.log("返回带异常的数据", data)
+                            console.log("返回带异常的数据", data);
                             goToErrorPage(data);
                         }
                     } else {
@@ -373,6 +373,7 @@
                         layer.alert(data.message, {
                             end: function () {
                                 layer.closeAll();
+                                parent.layui.table.reload("userListData");
                                 parent.layer.close(index);
                             }
                         });

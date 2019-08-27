@@ -1,11 +1,5 @@
 <%--suppress HtmlUnknownAttribute,JSValidateJSDoc,JSUnresolvedVariable --%>
-<%--
-  Created by IntelliJ IDEA.
-  User: akira
-  Date: 2019/8/18
-  Time: 20:11
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set value="${pageContext.request.contextPath}" var="path" scope="page"/>
 <%@ page contentType="text/html;charset=UTF-8" %>
@@ -18,14 +12,14 @@
 </head>
 <body>
 <table id="userList" lay-filter="userListLayFilter" style="height: 100%"></table>
-<%--lay-filter ： 事件过滤器（公用属性），主要用于事件的精确匹配，跟选择器类似
---%>
+<%--lay-filter ： 事件过滤器（公用属性），主要用于事件的精确匹配，跟选择器类似--%>
 <div class="layui-btn-group getSelectedRowDetail">
     <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
     <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
     <button class="layui-btn" data-type="isAll">验证是否全选</button>
 </div>
 <script src="${path}/static/js/layui/layui.js"></script>
+<%--suppress JSUnfilteredForInLoop --%>
 <script>
     layui.use('table', function () {
         var table = layui.table;
@@ -36,6 +30,7 @@
         var tableIns = table.render({
             id: 'userListData',
             even: true,
+            width: "auto",
             skin: "row",
             elem: '#userList',
             method: "POST",
@@ -44,13 +39,79 @@
             height: 'full-58',
             url: '${path}/user/listUser3', //数据接口
             page: true,  //开启分页
+            parseData: function (data) {
+                console.log("表数据:", data);
+                for (var i in data.resource) {
+                    data.resource[i].userInfo.birthday = dateFormat(data.resource[i].userInfo.birthday, 2);
+                    data.resource[i].userInfo.regDate = dateFormat(data.resource[i].userInfo.regDate, 1);
+                    switch (data.resource[i].userInfo.gender) {
+                        case "0":
+                            data.resource[i].userInfo.gender = "";
+                            break;
+                        case "1":
+                            data.resource[i].userInfo.gender = "男";
+                            break;
+                        case "2":
+                            data.resource[i].userInfo.gender = "女";
+                            break;
+                        case "3":
+                            data.resource[i].userInfo.gender = "其他性别";
+                            break;
+                        default:
+                            data.resource[i].userInfo.gender = "鬼知道哦";
+                            break;
+                    }
+                    switch (data.resource[i].realNameAuth.certType) {
+                        case "0":
+                            data.resource[i].realNameAuth.certType = "";
+                            break;
+                        case "1":
+                            data.resource[i].realNameAuth.certType = "大陆居民身份证";
+                            break;
+                        case "2":
+                            data.resource[i].realNameAuth.certType = "港澳居民来往内地通行证";
+                            break;
+                        case "3":
+                            data.resource[i].realNameAuth.certType = "台湾居民来往大陆通行证";
+                            break;
+                        case "4":
+                            data.resource[i].realNameAuth.certType = "外国人永久居留身份证";
+                            break;
+                    }
+                    for (var x in data.resource[i].userInfo) {
+                        data.resource[i].userInfo[x] = data.resource[i].userInfo[x] === null ? "" : data.resource[i].userInfo[x];
+                    }
+                    for (var y in data.resource[i].realNameAuth) {
+                        data.resource[i].realNameAuth[y] = data.resource[i].realNameAuth[y] === null ? "" : data.resource[i].realNameAuth[y];
+                    }
+                }
+                return {
+                    "code": data.status,
+                    "msg": data.message,
+                    "count": data.customProp,
+                    "data": data.resource
+                };
+            },
             cols: [[ //表头
                 {field: 'chk', type: 'checkbox', fixed: 'left'},
-                {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'},
-                {field: 'uname', title: '用户名'},
-                {field: 'gender', title: '性别', templet: '<div>{{d.userInfo.gender}}</div>', sort: true},
-                {field: 'phone', title: '电话', templet: '<div>{{d.userInfo.phone}}</div>'},
-                {field: 'addr', title: '城市', templet: '<div>{{d.userInfo.addr}}</div>'}
+                {
+                    field: 'id', title: 'ID', templet: '<div>' +
+                        '<img src=\'${path}/resource/image/head/{{d.userInfo.headIcon}}\' class=\'layui-nav-img\' alt=\'头像\' style=\'width:25px;height:25px\'> ' +
+                        '{{d.id}}</div>',
+                    width: 120, sort: true, fixed: 'left'
+                },
+                {field: 'uname', title: '用户名', width: 130},
+                {field: 'role', title: '权限等级', width: 110, templet: '<div>{{d.role.role}}</div>', sort: true},
+                {field: 'bindPhone', title: '绑定手机', width: 120},
+                {field: 'bindEmail', title: '绑定邮箱', width: 190},
+                {field: 'gender', title: '性别', templet: '<div>{{d.userInfo.gender}}</div>', sort: true, width: 80},
+                {field: 'birthday', title: '生日', templet: "<div>{{d.userInfo.birthday}}</div>", sort: true, width: 130},
+                {field: 'phone', title: '电话', templet: '<div>{{d.userInfo.phone}}</div>', width: 120},
+                {field: 'addr', title: '城市', templet: '<div>{{d.userInfo.addr}}</div>', width: 200},
+                {field: 'addr', title: '注册时间', templet: '<div>{{d.userInfo.regDate}}</div>', width: 165},
+                {field: 'addr', title: '姓名', templet: '<div>{{d.realNameAuth.realName}}</div>', width: 130},
+                {field: 'addr', title: '证件号', templet: '<div>{{d.realNameAuth.cid}}</div>', width: 180},
+                {field: 'addr', title: '证件类型', templet: '<div>{{d.realNameAuth.certType}}</div>', width: 200}
             ]]
         });
         console.log("表格参数: ", tableIns);
@@ -103,10 +164,10 @@
                         closeBtn: 1,
                         area: ['80%', '100%'],
                         <%--content: '${path}/user/showAddUser'--%>
-                        content: '${path}/user/showAddUser',
-                        end:function () {
-                            tableIns.reload();
-                        }
+                        content: '${path}/user/showAddUser'
+                        // ,end: function () {
+                        //     tableIns.reload();
+                        // }
                     });
                     break;
                 case 'update':
@@ -158,11 +219,29 @@
                             layer.close(index);
                         });
                     break;
-                default:
-                    layer.alert("我不知道你点的是什么鬼玩意");
-                    break;
             }
-        })
+        });
+
+        function dateFormat(timestamp, castType) {
+            var date = new Date(timestamp),
+                Y = date.getFullYear().toString(),
+                M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1).toString(),
+                D = date.getDate().toString(),
+                H = date.getHours().toString(),
+                m = date.getMinutes().toString(),
+                s = date.getSeconds().toString();
+            M = M.length < 2 ? "0" + M : M;
+            D = D.length < 2 ? "0" + D : D;
+            H = H.length < 2 ? "0" + H : H;
+            m = m.length < 2 ? "0" + m : m;
+            s = s.length < 2 ? "0" + s : s;
+            D = D.toString().length < 2 ? "0" + D : D;
+            if (castType === 1) {
+                return Y + "-" + M + "-" + D + " " + H + ":" + m + ":" + s;
+            } else {
+                return Y + "-" + M + "-" + D;
+            }
+        }
     });
 </script>
 </body>

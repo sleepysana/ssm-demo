@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress ResultMapColumnCheck -->
 <mapper namespace="cn.akira.mapper.UserRoleMapper">
     <resultMap id="BaseResultMap" type="cn.akira.pojo.UserRole">
         <!--@mbg.generated-->
@@ -16,4 +17,10 @@
         insert into user_role(id, role) VALUES
         (#{id},#{role})
     </insert>
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT * FROM user_role
+    </select>
+    <select id="queryAllById" resultMap="BaseResultMap">
+        SELECT * FROM user_role WHERE id=#{id}
+    </select>
 </mapper>

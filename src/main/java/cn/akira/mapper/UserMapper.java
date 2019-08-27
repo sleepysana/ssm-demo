@@ -21,4 +21,6 @@ public interface UserMapper {
     int insert(User user);
 
     int deleteUserById(int id);
+
+    List<User> queryAll();
 }

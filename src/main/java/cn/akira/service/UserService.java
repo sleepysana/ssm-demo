@@ -24,5 +24,7 @@ public interface UserService {
     CommonData getUserByUname(String uname) throws Exception;
 
     String getUserHeadIcon(int id) throws Exception;
+
+    List<User> getAllUsersInfo() throws Exception;
 }
 

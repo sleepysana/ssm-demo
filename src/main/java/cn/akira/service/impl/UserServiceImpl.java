@@ -13,6 +13,7 @@ import cn.akira.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -114,6 +115,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getUserHeadIcon(int id) throws Exception {
-        return userInfoMapper.queryHeadIconById(id);
+        String icon = userInfoMapper.queryHeadIconById(id);
+        return icon;
+    }
+
+    @Override
+    public List<User> getAllUsersInfo() throws Exception {
+        List<User> users = userMapper.queryAll();
+        List<User> allUsersDetails = new ArrayList<>();
+        List<UserInfo> infoList = userInfoMapper.queryAll();
+        List<UserRole> roleList = userRoleMapper.queryAll();
+        List<UserRealNameAuth> authList = userRealNameAuthMapper.queryAll();
+        for (User user : users) {
+            for (UserInfo userInfo : infoList) {
+                if (user.getId().equals(userInfo.getId())) {
+                    user.setUserInfo(userInfo);
+                    break;
+                }
+            }
+            for (UserRole role : roleList) {
+                if (user.getId().equals(role.getId())) {
+                    user.setRole(role);
+                    break;
+                }
+            }
+            for (UserRealNameAuth auth : authList) {
+                if (user.getId().equals(auth.getId())) {
+                    user.setRealNameAuth(auth);
+                    break;
+                }
+            }
+            allUsersDetails.add(user);
+        }
+        return allUsersDetails;
     }
 }

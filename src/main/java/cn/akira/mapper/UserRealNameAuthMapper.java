@@ -4,8 +4,15 @@ import cn.akira.pojo.UserRealNameAuth;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Mapper
 public interface UserRealNameAuthMapper {
+
+    UserRealNameAuth queryAllById(@RequestParam("id") Integer id);
+
+    List<UserRealNameAuth> queryAll();
+
     /**
      * insert record to table
      *
@@ -24,8 +31,8 @@ public interface UserRealNameAuthMapper {
 
 
     UserRealNameAuth queryInfoByCidAndCertType(
-           String cid,
-           String certType
+            String cid,
+            String certType
     );
 
 

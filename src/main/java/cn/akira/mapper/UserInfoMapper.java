@@ -11,4 +11,8 @@ public interface UserInfoMapper {
     int insert(UserInfo userInfo);
 
     String queryHeadIconById(@RequestParam("id") int id);
+
+    List<UserInfo> queryAll();
+
+    UserInfo queryAllById(@RequestParam("id") Integer id);
 }

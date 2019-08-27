@@ -5,7 +5,6 @@ import cn.akira.pojo.UserInfo;
 import cn.akira.service.UserService;
 import cn.akira.util.CastUtil;
 import cn.akira.returnable.CommonData;
-import cn.akira.returnable.LayuiTableData;
 import cn.akira.util.ImgResizeUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,17 +115,17 @@ public class UserController {
 
     @RequestMapping("listUser3")
     @ResponseBody
-    public LayuiTableData listUser3() {
+    public CommonData listUser3() {
         try {
-            List<User> userBaseInfoList = userService.getUserBaseInfoList();
-            List<User> users = new ArrayList<>();
-            for (User user : userBaseInfoList) {
-                users.add(CastUtil.genderCast(user));
-            }
-            return new LayuiTableData(0, users.size(), users);
+            CommonData data = new CommonData();
+            List<User> allUsersInfo = userService.getAllUsersInfo();
+            data.setResource(allUsersInfo);
+            data.setStatus(0);
+            data.setCustomProp(allUsersInfo.size());
+            return data;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new CommonData("获取数据时发生错误了", e);
         }
     }
 
@@ -195,8 +194,6 @@ public class UserController {
     public CommonData createUser(
             @ModelAttribute User user,
             @RequestParam("rePassword") String rePassword) {
-
-
         String emailReg = "^[a-z0-9A-Z]+[-|a-z0-9A-Z._]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$";
         String chineseMainLandPhoneReg = "^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\\d{8}$";
         String uname = user.getUname();
@@ -266,19 +263,21 @@ public class UserController {
 
         try {
             //sha1校验，将上传的头像存入目标路径
-            File iconCacheFile = new File(iconCacheFileFullPath);
-            FileInputStream fileInputStream = new FileInputStream(iconCacheFile);
-            String suffix = headIcon.substring(headIcon.lastIndexOf("."));
-            String hexedFileName = DigestUtils.sha1Hex(fileInputStream) + suffix;
-            fileInputStream.close();
-            String hexedFilePath = iconCachePath + "..\\" + hexedFileName;
-            File hexedFileNamePath = new File(hexedFilePath);
-            if (!hexedFileNamePath.exists()) {
-                Files.move(iconCacheFile.toPath(), hexedFileNamePath.toPath());
+            if (!headIcon.equals("default_head_icon.png")) {
+                File iconCacheFile = new File(iconCacheFileFullPath);
+                FileInputStream fileInputStream = new FileInputStream(iconCacheFile);
+                String suffix = headIcon.substring(headIcon.lastIndexOf("."));
+                String hexedFileName = DigestUtils.sha1Hex(fileInputStream) + suffix;
+                fileInputStream.close();
+                String hexedFilePath = iconCachePath + "..\\" + hexedFileName;
+                File hexedFileNamePath = new File(hexedFilePath);
+                if (!hexedFileNamePath.exists()) {
+                    Files.move(iconCacheFile.toPath(), hexedFileNamePath.toPath());
+                }
+                UserInfo userInfo = user.getUserInfo() == null ? new UserInfo() : user.getUserInfo();
+                userInfo.setHeadIcon(hexedFileName);
+                user.setUserInfo(userInfo);
             }
-            UserInfo userInfo = user.getUserInfo() == null ? new UserInfo() : user.getUserInfo();
-            userInfo.setHeadIcon(hexedFileName);
-            user.setUserInfo(userInfo);
             user.setPassword(DigestUtils.sha1Hex(user.getPassword()));
             return userService.createUser(user);
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress ResultMapColumnCheck -->
 <mapper namespace="cn.akira.mapper.UserRealNameAuthMapper">
   <resultMap id="BaseResultMap" type="cn.akira.pojo.UserRealNameAuth">
     <result column="id" jdbcType="INTEGER" property="id" />
@@ -48,5 +49,11 @@
   </insert>
   <select id="queryInfoByCidAndCertType" resultMap="BaseResultMap">
     SELECT id FROM user_real_name_auth WHERE cid = #{param1} AND cert_type = #{param2}
+  </select>
+    <select id="queryAll" resultMap="BaseResultMap">
+      SELECT * FROM user_real_name_auth
+    </select>
+  <select id="queryAllById" resultMap="BaseResultMap">
+    SELECT * FROM user_real_name_auth WHERE id = #{id}
   </select>
 </mapper>

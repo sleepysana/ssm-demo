@@ -81,4 +81,7 @@
     <select id="queryUserByBindEmail" resultMap="user">
         SELECT id FROM user WHERE bind_email  =#{bindEmail}
     </select>
+    <select id="queryAll" resultMap="user">
+        SELECT * FROM user
+    </select>
 </mapper>
