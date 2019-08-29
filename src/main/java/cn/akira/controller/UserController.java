@@ -6,14 +6,17 @@ import cn.akira.service.UserService;
 import cn.akira.util.CastUtil;
 import cn.akira.returnable.CommonData;
 import cn.akira.util.ImgResizeUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +40,14 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
 
     @RequestMapping("login")
     public String loginPage() {
@@ -76,12 +89,12 @@ public class UserController {
 
     @RequestMapping("userList1")
     public String userListPage1(Model model) throws Exception {
-        List<User> userBaseInfoList = userService.getUserBaseInfoList();
-        List<User> users = new ArrayList<>();
-        for (User user : userBaseInfoList) {
-            users.add(CastUtil.genderCast(user));
-        }
-        model.addAttribute("userList", users);
+//        List<User> userBaseInfoList = userService.getUserBaseInfoList();
+//        List<User> users = new ArrayList<>();
+//        for (User user : userBaseInfoList) {
+//            users.add(CastUtil.genderCast(user));
+//        }
+//        model.addAttribute("userList", users);
         return "user/userList1";
     }
 
@@ -98,19 +111,20 @@ public class UserController {
     @RequestMapping("listUser2")
     @ResponseBody
     public CommonData listUser2() {
-        try {
-            List<User> userBaseInfoList = userService.getUserBaseInfoList();
-            List<User> users = new ArrayList<>();
-            for (User user : userBaseInfoList) {
-                users.add(CastUtil.genderCast(user));
-            }
-            CommonData commonData = new CommonData();
-            commonData.setResource(users);
-            return commonData;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+//        try {
+//            List<User> userBaseInfoList = userService.getUserBaseInfoList();
+//            List<User> users = new ArrayList<>();
+//            for (User user : userBaseInfoList) {
+//                users.add(CastUtil.genderCast(user));
+//            }
+//            CommonData commonData = new CommonData();
+//            commonData.setResource(users);
+//            return commonData;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+        return null;
     }
 
     @RequestMapping("listUser3")
@@ -119,7 +133,9 @@ public class UserController {
         try {
             CommonData data = new CommonData();
             List<User> allUsersInfo = userService.getAllUsersInfo();
-            data.setResource(allUsersInfo);
+            String s = JSON.toJSONString(allUsersInfo, SerializerFeature.WriteNullStringAsEmpty);
+
+            data.setResource(JSONObject.parse(s));
             data.setStatus(0);
             data.setCustomProp(allUsersInfo.size());
             return data;
@@ -132,6 +148,17 @@ public class UserController {
     @RequestMapping("showAddUser")
     public String toAddUserPage() {
         return "user/addUser";
+    }
+
+    @RequestMapping("showEditUser/{userId}")
+    public String toEditUserPage(@PathVariable int userId,Model model) {
+        try {
+            User user = userService.getUserDetailWithoutPassword(userId);
+            model.addAttribute("user",user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "user/editUser";
     }
 
     @RequestMapping("headIconUpload")
@@ -286,7 +313,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping("deleteUser")
+    @RequestMapping("deleteUsers")
     @ResponseBody
     public CommonData deleteUsers(@RequestParam("ids[]") List<Integer> ids) {
         try {

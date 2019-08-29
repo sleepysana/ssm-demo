@@ -1,13 +1,7 @@
 <%--suppress HtmlFormInputWithoutLabel,HtmlUnknownAttribute--%>
-<%--
-  Created by IntelliJ IDEA.
-  User: akira
-  Date: 2019/8/21
-  Time: 17:17
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <c:set value="${pageContext.request.contextPath}" var="path" scope="page"/>
 <html>
 <head>
@@ -15,6 +9,15 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${path}/static/css/layui/layui.css">
     <style type="text/css">
+        .c1 {
+            color: blue;
+            text-align: center;
+            float: right;
+            margin-right: 121px;
+            margin-top: -9px;
+            font-size: 13px;
+        }
+
         .icon {
             width: 270px;
             height: 300px;
@@ -45,7 +48,8 @@
 <form class="layui-form">
     <br>
     <div class="icon" name="user.UserInfo.headIcon">
-        <img src="${path}/resource/image/head/default_head_icon.png" id="headIcon" style="width: 170px;height: 170px"
+        <img src="${path}/resource/image/head/${user.userInfo.headIcon}" id="headIcon"
+             style="width: 170px;height: 170px"
              alt="我觉得你是傻逼">
     </div>
     <div style="margin:0 0 0 323px;">
@@ -55,7 +59,7 @@
                 <label class="layui-form-label">用户名</label>
                 <div class="layui-input-inline">
                     <input type="text" name="uname" id="uname" lay-verify="required|uname" autocomplete="off"
-                           class="layui-input">
+                           class="layui-input" value="${user.uname}">
                 </div>
             </div>
             <div class="layui-inline">
@@ -74,18 +78,21 @@
             <div class="layui-inline">
                 <label class="layui-form-label">绑定手机</label>
                 <div class="layui-input-inline">
-                    <input type="tel" name="bindPhone" id="bindPhone" autocomplete="off" class="layui-input">
+                    <input type="tel" name="bindPhone" id="bindPhone" value="${user.bindPhone}" autocomplete="off"
+                           class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">绑定邮箱</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="bindEmail" id="bindEmail" lay-verify="required|email" autocomplete="off"
+                    <input type="text" name="bindEmail" id="bindEmail" value="${user.bindEmail}"
+                           lay-verify="required|email" autocomplete="off"
                            class="layui-input">
                 </div>
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item"><a href="#" class="c1" id="showChangePw">修改密码</a></div>
+        <div class="layui-form-item" id="changePw">
             <div class="layui-inline">
                 <label class="layui-form-label">密码</label>
                 <div class="layui-input-inline">
@@ -118,7 +125,10 @@
             <div class="layui-inline">
                 <label class="layui-form-label">生日</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="userInfo.birthday" id="birthday" autocomplete="off" class="layui-input"
+                    <input type="text" name="userInfo.birthday"
+                           value="<fmt:formatDate value="${user.userInfo.birthday}" pattern="yyyy-MM-dd"/>"
+                           id="birthday"
+                           autocomplete="off" class="layui-input"
                            readonly>
                 </div>
             </div>
@@ -127,13 +137,15 @@
             <div class="layui-inline">
                 <label class="layui-form-label">联系电话</label>
                 <div class="layui-input-inline">
-                    <input type="tel" name="userInfo.phone" id="phone" autocomplete="off" class="layui-input">
+                    <input type="tel" name="userInfo.phone" id="phone" value="${user.userInfo.phone}" autocomplete="off"
+                           class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">联系邮箱</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="userInfo.email" id="email" autocomplete="off" class="layui-input">
+                    <input type="text" name="userInfo.email" id="email" value="${user.userInfo.email}"
+                           autocomplete="off" class="layui-input">
                 </div>
             </div>
         </div>
@@ -141,7 +153,8 @@
     <div class="layui-form-item" style="width: 947px">
         <label class="layui-form-label">联系地址</label>
         <div class="layui-input-block">
-            <input type="text" name="userInfo.addr" id="addr" lay-verify="addr" autocomplete="off" placeholder="请详细点.."
+            <input type="text" name="userInfo.addr" id="addr" lay-verify="addr" value="${user.userInfo.addr}"
+                   autocomplete="off" placeholder="请详细点.."
                    class="layui-input">
         </div>
     </div>
@@ -150,14 +163,16 @@
         <div class="layui-inline">
             <label class="layui-form-label">姓名</label>
             <div class="layui-input-inline">
-                <input type="text" name="realNameAuth.realName" id="realName" lay-verify="realName" autocomplete="off"
+                <input type="text" name="realNameAuth.realName" id="realName" value="${user.realNameAuth.realName}"
+                       lay-verify="realName" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">证件号码</label>
             <div class="layui-input-inline">
-                <input type="text" name="realNameAuth.cid" id="cid" lay-verify="cid" autocomplete="off"
+                <input type="text" name="realNameAuth.cid" id="cid" lay-verify="cid" value="${user.realNameAuth.cid}"
+                       autocomplete="off"
                        class="layui-input">
             </div>
         </div>
@@ -166,7 +181,7 @@
             <div class="layui-input-inline">
                 <select name="realNameAuth.certType" id="certType" lay-verify="certType" lay-filter="certTypeLayFilter">
                     <option selected></option>
-                    <option value="1">居民身份证</option>
+                    <option value="1">大陆居民身份证</option>
                     <option value="2">港澳居民来往内地通行证</option>
                     <option value="3">台湾居民来往大陆通行证</option>
                     <option value="4">外国人永久居留身份证</option>
@@ -176,8 +191,7 @@
     </div>
     <div class="layui-form-item" style="text-align: center;bottom: 4px;width: 100%;position: fixed">
         <div class="layui-input-block" style="margin: auto">
-            <button type="button" class="layui-btn" id="submit">立即提交</button>
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            <button type="button" class="layui-btn" id="submit">确认修改</button>
         </div>
     </div>
 </form>
@@ -186,6 +200,14 @@
 <script type="text/javascript" src="${path}/static/js/layui/layui.js"></script>
 <%--suppress JSUnfilteredForInLoop --%>
 <script>
+    $(function () {
+        $("input").attr("disabled","");
+        $("select").attr("disabled","");
+        $("#changePw").hide();
+        $("#role").find("option[value='${user.role.role}']").prop("selected", true);
+        $("#gender").find("option[value='${user.userInfo.gender}']").prop("selected", true);
+        $("#certType").find("option[value='${user.realNameAuth.certType}']").prop("selected", true);
+    });
     layui.use(['form', 'layedit', 'laydate', 'upload'], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -198,10 +220,6 @@
             max: getNowFormatDate()
             // show:true
         });
-
-        // $("#headIcon").click(function () {
-        //     layer.load(1);
-        // });
 
         upload.render({
             elem: "#headIcon",
@@ -291,19 +309,16 @@
             if ($(_this).val().length < 3) {
                 $(_this).attr("style", "border-color:red;color:red");
                 layer.msg('用户名太短了兄弟', {icon: 5});
-                unameFlag = false;
                 return;
             }
             if ($(_this).val().indexOf("@") !== -1) {
                 $(_this).attr("style", "border-color:red;color:red");
                 layer.msg('用户名不要包含"@"好不好', {icon: 5});
-                unameFlag = false;
                 return;
             }
             if ($(_this).val().indexOf(" ") !== -1) {
                 $(_this).attr("style", "border-color:red;color:red");
                 layer.msg('用户名不要有空格好不好嘛', {icon: 5});
-                unameFlag = false;
                 return false;
             }
         });
@@ -381,7 +396,7 @@
                 }, error: function (e) {
                     layer.alert("创建失败,因为后台没有响应", {
                         yes: function () {
-                            layer.close(layer.index-1);
+                            layer.close(layer.index - 1);
                             layer.close(layer.index);
                         }
                     });
@@ -447,5 +462,10 @@
             temp_form.submit();
         }
     });
+
+    $("#showChangePw").click(function () {
+        $(this).hide();
+        $("#changePw").show();
+    })
 </script>
 </html>

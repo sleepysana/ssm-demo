@@ -16,7 +16,7 @@ public interface UserMapper {
 
     User queryUserByBindEmail(@RequestParam("bindEmail") String bindEmail);
 
-    List<User> queryAllBaseInfo();
+    User queryUserWithAllPropExceptPasswordById(@RequestParam("id") Integer id);
 
     int insert(User user);
 

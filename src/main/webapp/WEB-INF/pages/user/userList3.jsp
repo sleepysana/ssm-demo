@@ -21,6 +21,7 @@
 <script src="${path}/static/js/layui/layui.js"></script>
 <%--suppress JSUnfilteredForInLoop --%>
 <script>
+    var headPath = "${path}/resource/image/head/";
     layui.use('table', function () {
         var table = layui.table;
         // var layer = layui.layer;
@@ -42,8 +43,8 @@
             parseData: function (data) {
                 console.log("表数据:", data);
                 for (var i in data.resource) {
-                    data.resource[i].userInfo.birthday = dateFormat(data.resource[i].userInfo.birthday, 2);
-                    data.resource[i].userInfo.regDate = dateFormat(data.resource[i].userInfo.regDate, 1);
+                    var b = data.resource[i].userInfo.birthday;
+                    data.resource[i].userInfo.birthday = b === undefined ? "" : b;
                     switch (data.resource[i].userInfo.gender) {
                         case "0":
                             data.resource[i].userInfo.gender = "";
@@ -78,12 +79,6 @@
                             data.resource[i].realNameAuth.certType = "外国人永久居留身份证";
                             break;
                     }
-                    for (var x in data.resource[i].userInfo) {
-                        data.resource[i].userInfo[x] = data.resource[i].userInfo[x] === null ? "" : data.resource[i].userInfo[x];
-                    }
-                    for (var y in data.resource[i].realNameAuth) {
-                        data.resource[i].realNameAuth[y] = data.resource[i].realNameAuth[y] === null ? "" : data.resource[i].realNameAuth[y];
-                    }
                 }
                 return {
                     "code": data.status,
@@ -96,7 +91,7 @@
                 {field: 'chk', type: 'checkbox', fixed: 'left'},
                 {
                     field: 'id', title: 'ID', templet: '<div>' +
-                        '<img src=\'${path}/resource/image/head/{{d.userInfo.headIcon}}\' class=\'layui-nav-img\' alt=\'头像\' style=\'width:25px;height:25px\'> ' +
+                        '<img alt="icon" src=' + headPath + '{{d.userInfo.headIcon}} class="layui-nav-img" style="width:25px;height:25px"> ' +
                         '{{d.id}}</div>',
                     width: 120, sort: true, fixed: 'left'
                 },
@@ -111,10 +106,21 @@
                 {field: 'addr', title: '注册时间', templet: '<div>{{d.userInfo.regDate}}</div>', width: 165},
                 {field: 'addr', title: '姓名', templet: '<div>{{d.realNameAuth.realName}}</div>', width: 130},
                 {field: 'addr', title: '证件号', templet: '<div>{{d.realNameAuth.cid}}</div>', width: 180},
-                {field: 'addr', title: '证件类型', templet: '<div>{{d.realNameAuth.certType}}</div>', width: 200}
+                {field: 'addr', title: '证件类型', templet: '<div>{{d.realNameAuth.certType}}</div>', width: 200},
+                {
+                    field: 'operation', title: '操作', fixed: 'right',
+                    templet: '<div><div class="layui-btn-group">\n' +
+                        '  <button type="button" class="layui-btn layui-btn-xs" onclick="showEditUser({{d.id}})">\n' +
+                        '    <i class="layui-icon">&#xe642;</i>\n' +
+                        '  </button>' +
+                        '  <button type="button" class="layui-btn layui-btn-xs layui-btn-danger">\n' +
+                        '    <i class="layui-icon">&#xe640;</i>\n' +
+                        '</div></div>',
+                    width:85
+                }
             ]]
         });
-        console.log("表格参数: ", tableIns);
+        // console.log("表格参数: ", tableIns);
 
         //监听表格复选框点击
         table.on('checkbox(userListLayFilter)', function (data) {
@@ -165,9 +171,6 @@
                         area: ['80%', '100%'],
                         <%--content: '${path}/user/showAddUser'--%>
                         content: '${path}/user/showAddUser'
-                        // ,end: function () {
-                        //     tableIns.reload();
-                        // }
                     });
                     break;
                 case 'update':
@@ -192,7 +195,7 @@
                             layer.load(1);
                             $.ajax({
                                 type: "post",
-                                url: "${path}/user/deleteUser",
+                                url: "${path}/user/deleteUsers",
                                 data: {"ids": ids},
                                 dataType: "json",
                                 success: function (data) {
@@ -221,28 +224,18 @@
                     break;
             }
         });
-
-        function dateFormat(timestamp, castType) {
-            var date = new Date(timestamp),
-                Y = date.getFullYear().toString(),
-                M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1).toString(),
-                D = date.getDate().toString(),
-                H = date.getHours().toString(),
-                m = date.getMinutes().toString(),
-                s = date.getSeconds().toString();
-            M = M.length < 2 ? "0" + M : M;
-            D = D.length < 2 ? "0" + D : D;
-            H = H.length < 2 ? "0" + H : H;
-            m = m.length < 2 ? "0" + m : m;
-            s = s.length < 2 ? "0" + s : s;
-            D = D.toString().length < 2 ? "0" + D : D;
-            if (castType === 1) {
-                return Y + "-" + M + "-" + D + " " + H + ":" + m + ":" + s;
-            } else {
-                return Y + "-" + M + "-" + D;
-            }
-        }
     });
+    function showEditUser(id) {
+        layer.open({
+            type: 2,
+            moveOut: true,
+            scrollbar: false,
+            title: '编辑用户 '+id,
+            closeBtn: 1,
+            area: ['80%', '100%'],
+            content: '${path}/user/showEditUser/'+id
+        });
+    }
 </script>
 </body>
 </html>

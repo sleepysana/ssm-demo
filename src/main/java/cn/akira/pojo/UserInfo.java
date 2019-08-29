@@ -1,7 +1,6 @@
 package cn.akira.pojo;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -25,7 +24,7 @@ public class UserInfo implements Serializable {
     /**
      * 出生日期
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JSONField(format = "yyyy-MM-dd")
     private Date birthday;
 
     /**
@@ -77,7 +76,7 @@ public class UserInfo implements Serializable {
     }
 
     public void setGender(String gender) {
-        this.gender = gender.replace(" ", "").equals("")?null:gender;
+        this.gender = gender;
     }
 
     public Date getBirthday() {

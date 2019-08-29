@@ -48,18 +48,6 @@
         </where>
     </select>
 
-    <select id="queryAllBaseInfo" resultMap="user">
-        SELECT u.id,
-               u.uname,
-               ui.gender,
-               ui.birthday,
-               ui.phone,
-               ui.addr
-        FROM user u
-                 LEFT JOIN user_info ui ON u.id = ui.id
-        ORDER BY u.id
-    </select>
-
     <delete id="insert">
         INSERT INTO user (uname, bind_email, bind_phone, password)
         VALUES (
@@ -82,6 +70,9 @@
         SELECT id FROM user WHERE bind_email  =#{bindEmail}
     </select>
     <select id="queryAll" resultMap="user">
-        SELECT * FROM user
+        SELECT id, uname, bind_email, bind_phone FROM user
+    </select>
+    <select id="queryUserWithAllPropExceptPasswordById" resultMap="user">
+        SELECT * FROM user_detail_all WHERE id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>

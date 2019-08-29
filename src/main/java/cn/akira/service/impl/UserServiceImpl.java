@@ -39,11 +39,6 @@ public class UserServiceImpl implements UserService {
         return dbUser;
     }
 
-    @Override
-    public List<User> getUserBaseInfoList() throws Exception {
-        List<User> users = userMapper.queryAllBaseInfo();
-        return users;
-    }
 
     @Override
     public CommonData createUser(User user) throws Exception {
@@ -148,5 +143,10 @@ public class UserServiceImpl implements UserService {
             allUsersDetails.add(user);
         }
         return allUsersDetails;
+    }
+
+    @Override
+    public User getUserDetailWithoutPassword(Integer id) throws Exception {
+        return userMapper.queryUserWithAllPropExceptPasswordById(id);
     }
 }
