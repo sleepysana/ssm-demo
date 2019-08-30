@@ -10,10 +10,12 @@ import cn.akira.pojo.UserRealNameAuth;
 import cn.akira.pojo.UserRole;
 import cn.akira.returnable.CommonData;
 import cn.akira.service.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,13 +44,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CommonData createUser(User user) throws Exception {
-        if (userMapper.queryUserByUname(user.getUname()) != null) {
+        if (userMapper.queryIdByUname(user.getUname()) != null) {
             return new CommonData("这个用户名已经被注册过了啊", "uname", false);
         }
-        if (userMapper.queryUserByBindEmail(user.getBindEmail()) != null) {
+        if (userMapper.queryIdByBindEmail(user.getBindEmail()) != null) {
             return new CommonData("这个邮箱已经被注册过了啊", "bindEmail", false);
         }
-        if (userMapper.queryUserByBindPhone(user.getBindPhone()) != null) {
+        if (userMapper.queryIdByBindPhone(user.getBindPhone()) != null) {
             return new CommonData("这个手机号已经被注册过了啊", "bindPhone", false);
         }
         if (userRealNameAuthMapper.queryInfoByCidAndCertType(
@@ -57,6 +59,7 @@ public class UserServiceImpl implements UserService {
         ) != null) {
             return new CommonData("这个证件号码已经被认证过了啊", "cid", false);
         }
+        user.setPassword(DigestUtils.sha1Hex(user.getPassword()));
         int effectRow1 = userMapper.insert(user);
         User insertedUser = userMapper.queryUser(user);
         Integer id = insertedUser.getId();
@@ -90,6 +93,7 @@ public class UserServiceImpl implements UserService {
         try {
             int effectRows = 0;
             for (Integer id : ids) {
+
                 effectRows += userMapper.deleteUserById(id);
             }
             if (effectRows == 0) {
@@ -102,8 +106,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public CommonData deleteUserById(Integer id) throws Exception {
+        int effectRows = userMapper.deleteUserById(id);
+        return effectRows < 1 ? new CommonData("删除失败", false) : new CommonData("删除成功");
+    }
+
+    @Override
     public CommonData getUserByUname(String uname) throws Exception {
-        if (userMapper.queryUserByUname(uname) != null) {
+        if (userMapper.queryIdByUname(uname) != null) {
             return new CommonData("这个用户名已经被注册过了啊", false);
         } else return new CommonData();
     }
@@ -116,37 +126,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsersInfo() throws Exception {
-        List<User> users = userMapper.queryAll();
-        List<User> allUsersDetails = new ArrayList<>();
-        List<UserInfo> infoList = userInfoMapper.queryAll();
-        List<UserRole> roleList = userRoleMapper.queryAll();
-        List<UserRealNameAuth> authList = userRealNameAuthMapper.queryAll();
-        for (User user : users) {
-            for (UserInfo userInfo : infoList) {
-                if (user.getId().equals(userInfo.getId())) {
-                    user.setUserInfo(userInfo);
-                    break;
-                }
-            }
-            for (UserRole role : roleList) {
-                if (user.getId().equals(role.getId())) {
-                    user.setRole(role);
-                    break;
-                }
-            }
-            for (UserRealNameAuth auth : authList) {
-                if (user.getId().equals(auth.getId())) {
-                    user.setRealNameAuth(auth);
-                    break;
-                }
-            }
-            allUsersDetails.add(user);
-        }
-        return allUsersDetails;
+        return userMapper.queryUsersWithAllPropExceptPassword();
     }
 
     @Override
     public User getUserDetailWithoutPassword(Integer id) throws Exception {
         return userMapper.queryUserWithAllPropExceptPasswordById(id);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public CommonData updateUserDetail(User user) throws Exception {
+        if (user.getPassword() != null && !user.getPassword().equals("")) {
+            user.setPassword(DigestUtils.sha1Hex(user.getPassword()));
+        }
+        Integer id1 = userMapper.queryIdByUname(user.getUname());
+        Integer id2 = userMapper.queryIdByBindPhone(user.getBindPhone());
+        Integer id3 = userMapper.queryIdByBindEmail(user.getBindEmail());
+        if (id1 != null && !user.getId().equals(id1))
+            return new CommonData("这个用户名已经被注册过了", "uname", false);
+        else if (id2 != null && !user.getId().equals(id2))
+            return new CommonData("其他用户已经绑定了这个手机号", "bindPhone", false);
+        else if (id3 != null && !user.getId().equals(id3))
+            return new CommonData("其他用户已经绑定了这个邮箱", "bindEmail", false);
+
+        userMapper.updateAllById(user);
+        userInfoMapper.updateAllById(user.getUserInfo());
+        userRoleMapper.updateAllById(user.getRole());
+
+        return new CommonData("改好了");
     }
 }

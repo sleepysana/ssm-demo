@@ -5,7 +5,7 @@
 <c:set value="${pageContext.request.contextPath}" var="path" scope="page"/>
 <html>
 <head>
-    <title>添加用户</title>
+    <title>编辑用户</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${path}/static/css/layui/layui.css">
     <style type="text/css">
@@ -39,6 +39,17 @@
             width: 663px;
         }
 
+        label, a, p {
+            vertical-align: middle;
+            overflow: hidden;
+            -moz-user-select: none;
+            -o-user-select: none;
+            -khtml-user-select: none; /* you could also put this in a class */
+            -webkit-user-select: none; /* and add the CSS class here instead */
+            -ms-user-select: none;
+            user-select: none; /**禁止选中文字*/
+        }
+
         img:hover {
             cursor: pointer;
         }
@@ -48,9 +59,11 @@
 <form class="layui-form">
     <br>
     <div class="icon" name="user.UserInfo.headIcon">
-        <img src="${path}/resource/image/head/${user.userInfo.headIcon}" id="headIcon"
+        <img class="layui-nav-img"
+             src="${path}/resource/image/head/${user.userInfo.headIcon}"
+             id="headIcon"
              style="width: 170px;height: 170px"
-             alt="我觉得你是傻逼">
+             alt="此时无法显示你可爱的头像，具体为什么我也不知道">
     </div>
     <div style="margin:0 0 0 323px;">
         <p>-账户关键信息-</p>
@@ -91,7 +104,6 @@
                 </div>
             </div>
         </div>
-        <div class="layui-form-item"><a href="#" class="c1" id="showChangePw">修改密码</a></div>
         <div class="layui-form-item" id="changePw">
             <div class="layui-inline">
                 <label class="layui-form-label">密码</label>
@@ -109,6 +121,7 @@
                 </div>
             </div>
         </div>
+        <div class="layui-form-item"><a href="javascript:return;" class="c1" id="showChangePw">修改密码</a></div>
         <p>-基本信息-</p>
         <div class="layui-form-item">
             <div class="layui-inline">
@@ -163,23 +176,26 @@
         <div class="layui-inline">
             <label class="layui-form-label">姓名</label>
             <div class="layui-input-inline">
-                <input type="text" name="realNameAuth.realName" id="realName" value="${user.realNameAuth.realName}"
+                <input type="text" id="realName"
+                       value="${user.realNameAuth.realName}"
                        lay-verify="realName" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" disabled>
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">证件号码</label>
             <div class="layui-input-inline">
-                <input type="text" name="realNameAuth.cid" id="cid" lay-verify="cid" value="${user.realNameAuth.cid}"
+                <input type="text" id="cid"
+                       lay-verify="cid" value="${user.realNameAuth.cid}"
                        autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" disabled>
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">证件类型</label>
             <div class="layui-input-inline">
-                <select name="realNameAuth.certType" id="certType" lay-verify="certType" lay-filter="certTypeLayFilter">
+                <select id="certType" lay-verify="certType"
+                        lay-filter="certTypeLayFilter" disabled>
                     <option selected></option>
                     <option value="1">大陆居民身份证</option>
                     <option value="2">港澳居民来往内地通行证</option>
@@ -201,8 +217,8 @@
 <%--suppress JSUnfilteredForInLoop --%>
 <script>
     $(function () {
-        $("input").attr("disabled","");
-        $("select").attr("disabled","");
+        // $("input").attr("disabled", "");
+        // $("select").attr("disabled", "");
         $("#changePw").hide();
         $("#role").find("option[value='${user.role.role}']").prop("selected", true);
         $("#gender").find("option[value='${user.userInfo.gender}']").prop("selected", true);
@@ -329,12 +345,12 @@
 
         $("#submit").click(function () {
             var headIconSrc = $("#headIcon").attr("src");
-            var uname = $("#uname").val(),
+            var id = ${user.id},
+                uname = $("#uname").val(),
                 role = $("#role").val(),
                 bindPhone = $("#bindPhone").val(),
                 bindEmail = $("#bindEmail").val(),
                 password = $("#password").val(),
-                rePassword = $("#rePassword").val(),
                 gender = $("#gender").val(),
                 birthday = $("#birthday").val(),
                 phone = $("#phone").val(),
@@ -347,8 +363,9 @@
             layer.load(1);
             $.ajax({
                 type: "post",
-                url: "${path}/user/createUser",
+                url: "${path}/user/editUser",
                 data: {
+                    "id": id,
                     "uname": uname,
                     "bindPhone": bindPhone,
                     "bindEmail": bindEmail,
@@ -362,13 +379,12 @@
                     "userInfo.headIcon": headIcon,
                     "realNameAuth.realName": realName,
                     "realNameAuth.cid": cid,
-                    "realNameAuth.certType": certType,
-                    "rePassword": rePassword
+                    "realNameAuth.certType": certType
                 },
                 async: true,
                 dataType: "json",
                 success: function (data) {
-                    console.log("创建用户请求成功回调:", data);
+                    console.log("编辑用户请求成功回调:", data);
                     if (!data.flag) {
                         layer.alert(data.message, {
                             end: function () {
@@ -384,12 +400,10 @@
                         }
                     } else {
                         var index = parent.layer.getFrameIndex(window.name);
-                        console.log(index);
                         layer.alert(data.message, {
                             end: function () {
                                 layer.closeAll();
                                 parent.layui.table.reload("userListData");
-                                parent.layer.close(index);
                             }
                         });
                     }
@@ -463,9 +477,17 @@
         }
     });
 
+    var showChgPwFlag = false;
     $("#showChangePw").click(function () {
-        $(this).hide();
-        $("#changePw").show();
+        if (!showChgPwFlag) {
+            showChgPwFlag = true;
+            $(this).html("不修改密码(隐藏)");
+            $("#changePw").show();
+        } else {
+            showChgPwFlag = false;
+            $(this).html("修改密码");
+            $("#changePw").hide();
+        }
     })
 </script>
 </html>

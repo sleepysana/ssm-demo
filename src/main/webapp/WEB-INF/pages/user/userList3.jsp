@@ -18,10 +18,12 @@
     <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
     <button class="layui-btn" data-type="isAll">验证是否全选</button>
 </div>
+<script src="${path}/static/js/common/jquery-3.4.1.min.js" type="text/javascript"></script>
 <script src="${path}/static/js/layui/layui.js"></script>
 <%--suppress JSUnfilteredForInLoop --%>
 <script>
     var headPath = "${path}/resource/image/head/";
+var TABLE_INS;
     layui.use('table', function () {
         var table = layui.table;
         // var layer = layui.layer;
@@ -109,17 +111,22 @@
                 {field: 'addr', title: '证件类型', templet: '<div>{{d.realNameAuth.certType}}</div>', width: 200},
                 {
                     field: 'operation', title: '操作', fixed: 'right',
-                    templet: '<div><div class="layui-btn-group">\n' +
-                        '  <button type="button" class="layui-btn layui-btn-xs" onclick="showEditUser({{d.id}})">\n' +
-                        '    <i class="layui-icon">&#xe642;</i>\n' +
+                    templet: '<div><div class="layui-btn-group">' +
+                        '  <button type="button" class="layui-btn layui-btn-xs id{{d.id}}" onclick="showEditUser({{d.id}})">' +
+                        '    <i class="layui-icon">&#xe642;</i>' +
                         '  </button>' +
-                        '  <button type="button" class="layui-btn layui-btn-xs layui-btn-danger">\n' +
-                        '    <i class="layui-icon">&#xe640;</i>\n' +
+                        '  <button type="button" class="layui-btn layui-btn-xs layui-btn-danger id{{d.id}}" onclick="deleteUser({{d.id}})">' +
+                        '    <i class="layui-icon">&#xe640;</i>' +
                         '</div></div>',
-                    width:85
+                    width: 85
                 }
-            ]]
+            ]], done: function () {
+                console.log("渲染完成回调");
+                $(".id981008").hide();
+                $(".id981009").hide();
+            }
         });
+TABLE_INS = tableIns;
         // console.log("表格参数: ", tableIns);
 
         //监听表格复选框点击
@@ -158,8 +165,7 @@
          * 工具栏监听
          */
         table.on('toolbar(userListLayFilter)', function (data) {
-            // layer.alert("工具栏点击监听成功");
-            console.log(data);
+            console.log("你说的这个data它就是", data);
             switch (data.event) {
                 case 'add':
                     layer.open({
@@ -177,17 +183,22 @@
                     layer.alert("编辑");
                     break;
                 case 'delete':
-                    // layer.alert("删除");
+                    var msg = '你没有选择任何数据';
                     var selectedData = table.checkStatus("userListData").data;
                     if (selectedData.length < 1) {
-                        layer.alert("你没有选择任何数据");
+                        layer.alert(msg);
                         return;
+                    } else if (selectedData.length === 1) {
+                        msg = '确定要删除这条数据蛮?';
+                    } else {
+                        msg = '确定要删除这些数据嘛?';
                     }
                     var ids = [];
                     for (var i = 0; i < selectedData.length; i++) {
                         ids[i] = selectedData[i].id
                     }
-                    layer.confirm('确定要删除这些吗', {
+
+                    layer.confirm(msg, {
                             btn: ['当然', '再考虑'] //可以无限个按钮
                         },
                         function (index) {
@@ -225,16 +236,68 @@
             }
         });
     });
+
     function showEditUser(id) {
         layer.open({
             type: 2,
             moveOut: true,
             scrollbar: false,
-            title: '编辑用户 '+id,
+            title: '编辑用户 ' + id,
             closeBtn: 1,
             area: ['80%', '100%'],
-            content: '${path}/user/showEditUser/'+id
+            content: '${path}/user/showEditUser/' + id
         });
+    }
+
+    function deleteUser(id) {
+        if (id <= 981009) {
+            return null;
+        }
+        layer.confirm('确定要干掉这个人么?', {
+            btn: ['当然', '再考虑']
+        }, function () {
+            layer.load(1);
+            $.ajax({
+                type: "post",
+                url: "${path}/user/deleteUser",
+                data: {"id": id},
+                dataType: "json",
+                async:false,
+                success: function (data) {
+                    console.log("删除用户成功回调:", data);
+                    if (data.flag) {
+                        layer.closeAll();
+                        layer.alert(data.message);
+                        TABLE_INS.reload();
+                    }
+                    if (data.errInfo !== null) {
+                        goToErrorPage(data);
+                    }
+                }
+            })
+        },function () {
+            layer.closeAll();
+        })
+    }
+
+    function goToErrorPage(errData) {
+        //创建form表单
+        var temp_form = document.createElement("form");
+        temp_form.action = "${path}/error";
+        //如需打开新窗口，form的target属性要设置为'_blank'
+        temp_form.target = "_self";
+        temp_form.method = "post";
+        temp_form.style.display = "none";
+        //添加参数
+        for (var key in errData) {
+            var opt = document.createElement("textarea");
+            opt.name = key;
+            opt.value = errData[key];
+            temp_form.appendChild(opt);
+        }
+        document.body.appendChild(temp_form);
+        //提交数据
+        temp_form.submit();
     }
 </script>
 </body>

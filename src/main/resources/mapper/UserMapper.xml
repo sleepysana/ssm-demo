@@ -23,12 +23,12 @@
             <result column="id" property="id"/>
             <result column="role" property="role"/>
         </association>
-       <association property="realNameAuth" javaType="cn.akira.pojo.UserRealNameAuth">
-           <result column="id" property="id"/>
-           <result column="real_name" property="realName"/>
-           <result column="cid" property="cid"/>
-           <result column="cert_type" property="certType"/>
-       </association>
+        <association property="realNameAuth" javaType="cn.akira.pojo.UserRealNameAuth">
+            <result column="id" property="id"/>
+            <result column="real_name" property="realName"/>
+            <result column="cid" property="cid"/>
+            <result column="cert_type" property="certType"/>
+        </association>
     </resultMap>
 
     <select id="queryUser" resultType="cn.akira.pojo.User">
@@ -60,19 +60,37 @@
     <delete id="deleteUserById">
         DELETE FROM user WHERE id = #{id} AND id NOT IN (SELECT id FROM user_role WHERE role=99)
     </delete>
-    <select id="queryUserByUname" resultMap="user">
-        SELECT * FROM user WHERE uname = #{uname}
+    <select id="queryIdByUname" resultType="java.lang.Integer">
+        SELECT id FROM user WHERE uname = #{uname}
     </select>
-    <select id="queryUserByBindPhone" resultMap="user">
+    <select id="queryIdByBindPhone" resultType="java.lang.Integer">
         SELECT id FROM user WHERE bind_phone=#{bindPhone}
     </select>
-    <select id="queryUserByBindEmail" resultMap="user">
-        SELECT id FROM user WHERE bind_email  =#{bindEmail}
+    <select id="queryIdByBindEmail" resultType="java.lang.Integer">
+        SELECT id FROM user WHERE bind_email =#{bindEmail}
     </select>
     <select id="queryAll" resultMap="user">
-        SELECT id, uname, bind_email, bind_phone FROM user
+        SELECT id, uname, bind_email, bind_phone
+        FROM user
     </select>
     <select id="queryUserWithAllPropExceptPasswordById" resultMap="user">
         SELECT * FROM user_detail_all WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="queryUsersWithAllPropExceptPassword" resultMap="user">
+        SELECT *
+        FROM user_detail_all
+    </select>
+    <update id="updateAllById">
+        UPDATE user SET
+        uname=#{uname},
+        bind_phone=#{bindPhone},
+        bind_email=#{bindEmail}
+        <if test="password != null and password != ''">
+            ,password=#{password}
+        </if>
+        WHERE id=#{id}
+    </update>
+    <select id="queryById" resultMap="user">
+        SELECT * FROM user WHERE id=#{id,jdbcType=INTEGER}
     </select>
 </mapper>

@@ -18,9 +18,15 @@
         (#{id},#{role})
     </insert>
     <select id="queryAll" resultMap="BaseResultMap">
-        SELECT * FROM user_role
+        SELECT *
+        FROM user_role
     </select>
     <select id="queryAllById" resultMap="BaseResultMap">
         SELECT * FROM user_role WHERE id=#{id}
     </select>
+    <update id="updateAllById">
+        UPDATE user_role
+        SET role=#{role}
+        WHERE id=#{id}
+    </update>
 </mapper>

@@ -19,6 +19,8 @@ public interface UserService {
 
     CommonData deleteUsers(List<Integer> ids)  throws Exception;
 
+    CommonData deleteUserById(Integer id) throws Exception;
+
     CommonData getUserByUname(String uname) throws Exception;
 
     String getUserHeadIcon(int id) throws Exception;
@@ -26,5 +28,7 @@ public interface UserService {
     List<User> getAllUsersInfo() throws Exception;
 
     User getUserDetailWithoutPassword(Integer id) throws Exception;
+
+    CommonData updateUserDetail(User user) throws Exception;
 }
 

@@ -2,10 +2,10 @@ package cn.akira.controller;
 
 import cn.akira.pojo.User;
 import cn.akira.pojo.UserInfo;
-import cn.akira.service.UserService;
-import cn.akira.util.CastUtil;
 import cn.akira.returnable.CommonData;
+import cn.akira.service.UserService;
 import cn.akira.util.ImgResizeUtil;
+import cn.akira.util.ValidateUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -16,18 +16,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -104,7 +101,13 @@ public class UserController {
     }
 
     @RequestMapping("userList3")
-    public String userListPage3() {
+    public String userListPage3(Model model) {
+        try {
+            List<User> allUsersInfo = userService.getAllUsersInfo();
+            model.addAttribute("user", allUsersInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "user/userList3";
     }
 
@@ -151,10 +154,10 @@ public class UserController {
     }
 
     @RequestMapping("showEditUser/{userId}")
-    public String toEditUserPage(@PathVariable int userId,Model model) {
+    public String toEditUserPage(@PathVariable int userId, Model model) {
         try {
             User user = userService.getUserDetailWithoutPassword(userId);
-            model.addAttribute("user",user);
+            model.addAttribute("user", user);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -221,42 +224,14 @@ public class UserController {
     public CommonData createUser(
             @ModelAttribute User user,
             @RequestParam("rePassword") String rePassword) {
-        String emailReg = "^[a-z0-9A-Z]+[-|a-z0-9A-Z._]+@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-z]{2,}$";
-        String chineseMainLandPhoneReg = "^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\\d{8}$";
-        String uname = user.getUname();
-        String bindPhone = user.getBindPhone();
-        String bindEmail = user.getBindEmail();
-        String password = user.getPassword();
-        String email = user.getUserInfo().getEmail();
-        String addr = user.getUserInfo().getAddr();
         String headIcon = user.getUserInfo().getHeadIcon();
-        String realName = user.getRealNameAuth().getRealName();
-        String cid = user.getRealNameAuth().getCid();
-        String certType = user.getRealNameAuth().getCertType();
+        String password = user.getPassword();
         String iconCachePath = RESOURCE_PATH + "image\\head\\cache\\";
         String iconCacheFileFullPath = iconCachePath + headIcon;
-        if (uname == null) {
-            return new CommonData("用户名是必填的哦~", "uname", false);
-        } else if (uname.length() < 3) {
-            return new CommonData("用户名至少3个字符", "uname", false);
-        } else if (uname.contains(" ") || uname.contains("@")) {
-            return new CommonData("用户名不能有空格或者艾特符", "uname", false);
-        } else if (uname.matches(chineseMainLandPhoneReg)) {
-            return new CommonData("不要用疑似手机号格式的用户名嘛", "uname", false);
+        CommonData checkResult = ValidateUtil.UserFormDataValidate(user);
+        if (!checkResult.isFlag()) {
+            return checkResult;
         }
-
-        if (bindPhone == null && bindEmail == null) {
-            return new CommonData("邮箱和手机至少得绑一个吧", false);
-        }
-
-        if (bindPhone != null && !bindPhone.matches(chineseMainLandPhoneReg)) {
-            return new CommonData("手机号格式不对", "bindPhone", false);
-        }
-
-        if (bindEmail != null && !bindEmail.matches(emailReg)) {
-            return new CommonData("邮箱格式没写对", "bindEmail", false);
-        }
-
         // 密码校验
         if (password.replace(" ", "").equals("")) {
             return new CommonData("密码没输", "password", false);
@@ -268,48 +243,55 @@ public class UserController {
             return new CommonData("两次输入的密码都不一样,你要搞哪样嘛", "rePassword", false);
         }
 
-        if (email != null && !email.matches(emailReg)) {
-            return new CommonData("邮箱格式不正确", "email", false);
-        }
-        if (addr != null && (addr.replace(" ", "").length() < 5)) {
-            return new CommonData("地址写详细点嘛", "addr", false);
-        }
-        if (!((/*都为空*/
-                realName == null &&
-                        cid == null &&
-                        certType == null
-        ) || (/*都不为空*/
-                realName != null &&
-                        cid != null &&
-                        certType != null
-        ))) {
-            return new CommonData("如需实名信息,就请将其完善", false);
-        } else if (cid != null && certType.equals("1") && !cid.matches("^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X|x)$")) {
-            return new CommonData("身份证格式不对", "cid", false);
-        }
-
         try {
             //sha1校验，将上传的头像存入目标路径
+            File iconCacheFile = new File(iconCacheFileFullPath);
             if (!headIcon.equals("default_head_icon.png")) {
-                File iconCacheFile = new File(iconCacheFileFullPath);
-                FileInputStream fileInputStream = new FileInputStream(iconCacheFile);
-                String suffix = headIcon.substring(headIcon.lastIndexOf("."));
-                String hexedFileName = DigestUtils.sha1Hex(fileInputStream) + suffix;
-                fileInputStream.close();
-                String hexedFilePath = iconCachePath + "..\\" + hexedFileName;
-                File hexedFileNamePath = new File(hexedFilePath);
-                if (!hexedFileNamePath.exists()) {
-                    Files.move(iconCacheFile.toPath(), hexedFileNamePath.toPath());
-                }
-                UserInfo userInfo = user.getUserInfo() == null ? new UserInfo() : user.getUserInfo();
-                userInfo.setHeadIcon(hexedFileName);
-                user.setUserInfo(userInfo);
+                iconUploadConfirm(user);
             }
             user.setPassword(DigestUtils.sha1Hex(user.getPassword()));
-            return userService.createUser(user);
+            CommonData createResult = userService.createUser(user);
+            if (createResult.isFlag() && iconCacheFile.exists()) {
+                Files.delete(iconCacheFile.toPath());
+            }
+            return createResult;
         } catch (Exception e) {
             e.printStackTrace();
             return new CommonData("创建用户时遇到一个错误", e);
+        }
+    }
+
+    @RequestMapping("editUser")
+    @ResponseBody
+    public CommonData editUser(@ModelAttribute User user) {
+        String headIcon = user.getUserInfo().getHeadIcon();
+        String iconCacheFileFullPath = RESOURCE_PATH + "image\\head\\cache\\" + headIcon;
+        CommonData checkResult = ValidateUtil.UserFormDataValidate(user);
+        if (!checkResult.isFlag()) {
+            return checkResult;
+        }
+        try {
+            File iconCacheFile = new File(iconCacheFileFullPath);
+            String userHeadIcon = userService.getUserHeadIcon(user.getId());
+            if (!headIcon.equals(userHeadIcon)) {
+                iconUploadConfirm(user);
+                user.getUserInfo().setId(user.getId());
+                user.getRole().setId(user.getId());
+                user.setRealNameAuth(null);
+                CommonData editResult = userService.updateUserDetail(user);
+                if (editResult.isFlag()) {
+                    Files.delete(iconCacheFile.toPath());
+                }
+                return editResult;
+            } else {
+                user.getUserInfo().setId(user.getId());
+                user.getRole().setId(user.getId());
+                user.setRealNameAuth(null);
+                return userService.updateUserDetail(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new CommonData("修改用户时发生了错误", e);
         }
     }
 
@@ -320,6 +302,17 @@ public class UserController {
             return userService.deleteUsers(ids);
         } catch (Exception e) {
             return new CommonData("批量删除失败了", false);
+        }
+    }
+
+    @RequestMapping("deleteUser")
+    @ResponseBody
+    public CommonData deleteUser(@RequestParam("id") Integer id) {
+        try {
+            return userService.deleteUserById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new CommonData("删除用户时遇到了点错误", e);
         }
     }
 
@@ -338,5 +331,24 @@ public class UserController {
     public String exit(HttpSession session) {
         session.removeAttribute("SESSION_USER");
         return "redirect:/";
+    }
+
+    private void iconUploadConfirm(User user) throws Exception {
+        String headIcon = user.getUserInfo().getHeadIcon();
+        String iconCachePath = RESOURCE_PATH + "image\\head\\cache\\";
+        String iconCacheFileFullPath = iconCachePath + headIcon;
+        File iconCacheFile = new File(iconCacheFileFullPath);
+        FileInputStream fileInputStream = new FileInputStream(iconCacheFile);
+        String suffix = headIcon.substring(headIcon.lastIndexOf("."));
+        String hexedFileName = DigestUtils.sha1Hex(fileInputStream) + suffix;
+        fileInputStream.close();
+        String hexedFilePath = iconCachePath + "..\\" + hexedFileName;
+        File hexedFileNamePath = new File(hexedFilePath);
+        if (!hexedFileNamePath.exists()) {
+            Files.copy(iconCacheFile.toPath(), hexedFileNamePath.toPath());
+        }
+        UserInfo userInfo = user.getUserInfo() == null ? new UserInfo() : user.getUserInfo();
+        userInfo.setHeadIcon(hexedFileName);
+        user.setUserInfo(userInfo);
     }
 }

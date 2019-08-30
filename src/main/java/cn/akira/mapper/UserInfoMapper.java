@@ -15,4 +15,6 @@ public interface UserInfoMapper {
     List<UserInfo> queryAll();
 
     UserInfo queryAllById(@RequestParam("id") Integer id);
+
+    int updateAllById(UserInfo userInfo);
 }

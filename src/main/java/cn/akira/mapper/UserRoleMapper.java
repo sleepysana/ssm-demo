@@ -25,4 +25,7 @@ public interface UserRoleMapper {
     List<UserRole> queryAll();
 
     UserRole queryAllById(@RequestParam("id") Integer id);
+
+    int updateAllById(UserRole userRole);
+
 }

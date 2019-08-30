@@ -32,4 +32,15 @@
     <select id="queryAllById" resultMap="UserInfo">
         SELECT * FROM user_info WHERE id=#{id};
     </select>
+    <update id="updateAllById">
+        UPDATE user_info
+        SET
+        head_icon = #{headIcon},
+        gender = #{gender},
+        birthday=#{birthday},
+        phone=#{phone},
+        email=#{email},
+        addr=#{addr}
+        WHERE id=#{id}
+    </update>
 </mapper>
