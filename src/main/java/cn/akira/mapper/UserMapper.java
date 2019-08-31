@@ -7,7 +7,10 @@ import java.util.List;
 
 
 public interface UserMapper {
+
     User queryUser(User user);
+
+    User queryActivatedUser(User user);
 
     Integer queryIdByUname(@RequestParam("uname") String uname);
 

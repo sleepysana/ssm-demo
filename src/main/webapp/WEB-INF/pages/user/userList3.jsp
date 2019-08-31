@@ -23,7 +23,7 @@
 <%--suppress JSUnfilteredForInLoop --%>
 <script>
     var headPath = "${path}/resource/image/head/";
-var TABLE_INS;
+    var TABLE_INS;
     layui.use('table', function () {
         var table = layui.table;
         // var layer = layui.layer;
@@ -126,7 +126,7 @@ var TABLE_INS;
                 $(".id981009").hide();
             }
         });
-TABLE_INS = tableIns;
+        TABLE_INS = tableIns;
         // console.log("表格参数: ", tableIns);
 
         //监听表格复选框点击
@@ -262,7 +262,7 @@ TABLE_INS = tableIns;
                 url: "${path}/user/deleteUser",
                 data: {"id": id},
                 dataType: "json",
-                async:false,
+                async: false,
                 success: function (data) {
                     console.log("删除用户成功回调:", data);
                     if (data.flag) {
@@ -275,7 +275,7 @@ TABLE_INS = tableIns;
                     }
                 }
             })
-        },function () {
+        }, function () {
             layer.closeAll();
         })
     }

@@ -30,5 +30,6 @@ public interface UserService {
     User getUserDetailWithoutPassword(Integer id) throws Exception;
 
     CommonData updateUserDetail(User user) throws Exception;
+
 }
 

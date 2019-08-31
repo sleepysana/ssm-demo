@@ -5,6 +5,7 @@ import cn.akira.pojo.UserInfo;
 import cn.akira.returnable.CommonData;
 import cn.akira.service.UserService;
 import cn.akira.util.ImgResizeUtil;
+import cn.akira.util.RSAUtil;
 import cn.akira.util.ValidateUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -70,7 +71,13 @@ public class UserController {
         User dbUser = userService.getUser(user);
         if (dbUser != null) {
             //将用户信息存储到会话的中
-            dbUser.setPassword(null);
+            String password = dbUser.getPassword();
+            /*
+            数据库中的密码已经是经过sha1加密过了的，考虑到一些简单密码的sha1校验值的唯一性，可能会存在安全隐患
+            遂再将校验值进行RSA加密
+             */
+            String encryptedPassword = RSAUtil.encrypt(password);
+            dbUser.setPassword(encryptedPassword);
             session.setAttribute("SESSION_USER", dbUser);
             CommonData result = new CommonData();
             result.setResource(request.getContextPath() + "/index");

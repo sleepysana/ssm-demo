@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(User user) throws Exception {
-        User dbUser = userMapper.queryUser(user);
+        User dbUser = userMapper.queryActivatedUser(user);
         return dbUser;
     }
 

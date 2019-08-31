@@ -30,6 +30,11 @@ public class User implements Serializable {
     private String password;
 
     /**
+     * 状态
+     */
+    private Integer status;
+
+    /**
      * 用户信息
      */
     private UserInfo userInfo;
@@ -92,6 +97,14 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public UserInfo getUserInfo() {
         return userInfo;
     }
@@ -124,6 +137,7 @@ public class User implements Serializable {
                 ", bindEmail='" + bindEmail + '\'' +
                 ", bindPhone='" + bindPhone + '\'' +
                 ", password='" + password + '\'' +
+                ", status=" + status +
                 ", userInfo=" + userInfo +
                 ", role=" + role +
                 ", realNameAuth=" + realNameAuth +
