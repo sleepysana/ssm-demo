@@ -42,7 +42,7 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    <img src="${path}/resource/image/head/${userHeadIcon}" class="layui-nav-img" alt="头像">
+                    <img src="${path}/resource/image/head/${SESSION_USER.userInfo.headIcon}" class="layui-nav-img" alt="头像">
                     ${SESSION_USER.uname}
                 </a>
                 <dl class="layui-nav-child">
@@ -58,16 +58,10 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <li class="layui-nav-item">
-                    <a class="" href="javascript:;">后台数据展示</a>
+                    <a class="" href="javascript:;">用户管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/user/userList1')" id="list1">
-                            后台数据展示(jstl EL表达式方式)
-                        </a></dd>
-                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/user/userList2')">
-                            后台数据展示(ajax异步方式)
-                        </a></dd>
-                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/user/userList3')">
-                            后台数据展示(LayUI组件能力)
+                        <dd><a href="javascript:;" onclick="iframeLocation('${path}/user/userList')">
+                            用户列表
                         </a></dd>
                     </dl>
                 </li>
@@ -86,7 +80,7 @@
     </div>
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <iframe id="mainContent" src="https://www.baidu.com" style="height: 99.4%; width: 100%"
+        <iframe id="mainContent" style="height: 99.4%; width: 100%"
                 frameborder="0"></iframe>
     </div>
 

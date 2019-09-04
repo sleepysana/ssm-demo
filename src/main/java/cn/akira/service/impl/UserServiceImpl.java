@@ -41,8 +41,8 @@ public class UserServiceImpl implements UserService {
         return dbUser;
     }
 
-
     @Override
+    @Transactional
     public CommonData createUser(User user) throws Exception {
         if (userMapper.queryIdByUname(user.getUname()) != null) {
             return new CommonData("这个用户名已经被注册过了啊", "uname", false);
@@ -59,7 +59,6 @@ public class UserServiceImpl implements UserService {
         ) != null) {
             return new CommonData("这个证件号码已经被认证过了啊", "cid", false);
         }
-        user.setPassword(DigestUtils.sha1Hex(user.getPassword()));
         int effectRow1 = userMapper.insert(user);
         User insertedUser = userMapper.queryUser(user);
         Integer id = insertedUser.getId();
@@ -86,6 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public CommonData deleteUsers(List<Integer> ids) throws Exception {
         if (ids.size() == 0) {
             return new CommonData("没有选择任何数据", false);
@@ -106,6 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public CommonData deleteUserById(Integer id) throws Exception {
         int effectRows = userMapper.deleteUserById(id);
         return effectRows < 1 ? new CommonData("删除失败", false) : new CommonData("删除成功");

@@ -1,11 +1,12 @@
 package cn.akira.mapper;
 
 import cn.akira.pojo.User;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-
+@Repository
 public interface UserMapper {
 
     User queryUser(User user);

@@ -40,7 +40,7 @@
             toolbar: 'default',
             loading: true,
             height: 'full-58',
-            url: '${path}/user/listUser3', //数据接口
+            url: '${path}/user/listUser', //数据接口
             page: true,  //开启分页
             parseData: function (data) {
                 console.log("表数据:", data);

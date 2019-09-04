@@ -82,7 +82,7 @@ public class RSATest {
      * @return 密文
      * @throws Exception 加密过程中的异常信息
      */
-    private static String encrypt( String str, String publicKey ) throws Exception{
+    private static String encrypt( String str, String publicKey) throws Exception{
         //base64编码的公钥
         byte[] decoded = Base64.decodeBase64(publicKey);
         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
@@ -93,10 +93,9 @@ public class RSATest {
     }
     /**
      * RSA私钥解密
-     *
      * @param str 加密字符串
      * @param privateKey 私钥
-     * @return 铭文
+     * @return 明文
      * @throws Exception 解密过程中的异常信息
      */
     private static String decrypt(String str, String privateKey) throws Exception{

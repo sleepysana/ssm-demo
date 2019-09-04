@@ -232,11 +232,7 @@
          */
         form.verify({
             uname: function (value) {
-                // unameFlag=true;
                 var len = value.length;
-                if (!unameFlag) {
-                    return "用户名不合法啊";
-                }
                 if (value.indexOf(" ") !== -1) {
                     return '用户名不能有空格啊';
                 }
@@ -293,19 +289,16 @@
             if ($(_this).val().length < 3) {
                 $(_this).attr("style", "border-color:red;color:red");
                 layer.msg('用户名太短了兄弟', {icon: 5});
-                unameFlag = false;
                 return;
             }
             if ($(_this).val().indexOf("@") !== -1) {
                 $(_this).attr("style", "border-color:red;color:red");
                 layer.msg('用户名不要包含"@"好不好', {icon: 5});
-                unameFlag = false;
                 return;
             }
             if ($(_this).val().indexOf(" ") !== -1) {
                 $(_this).attr("style", "border-color:red;color:red");
                 layer.msg('用户名不要有空格好不好嘛', {icon: 5});
-                unameFlag = false;
                 return false;
             }
         });

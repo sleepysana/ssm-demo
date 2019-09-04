@@ -1,12 +1,12 @@
 package cn.akira.mapper;
 
 import cn.akira.pojo.UserRealNameAuth;
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Mapper
+@Repository
 public interface UserRealNameAuthMapper {
 
     UserRealNameAuth queryAllById(@RequestParam("id") Integer id);

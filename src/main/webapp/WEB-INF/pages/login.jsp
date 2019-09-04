@@ -1,86 +1,114 @@
-<%--suppress JSUnresolvedVariable,HtmlFormInputWithoutLabel --%>
+<!--suppress HtmlUnknownAttribute, SpellCheckingInspection -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set value="${pageContext.request.contextPath}" var="path" scope="page"/>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <title>登录</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="${path}/static/css/login/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="${path}/static/css/layui/login-util.css">
-    <link rel="stylesheet" type="text/css" href="${path}/static/css/login/login.css">
-    <link rel="stylesheet" href="${path}/static/css/layui/notiflix-1.3.0.min.css">
-    <script src="${path}/static/js/common/jquery-3.4.1.min.js"></script>
-    <script src="${path}/static/js/common/notiflix-1.3.0.min.js" type="text/javascript"></script>
+    <meta charset="UTF-8">
+    <title>系统登录</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.4/css/layui.css">
+    <link rel="stylesheet" href="${path}/static/css/login/login.css">
 </head>
 <body>
-
-<div class="login">
-    <div class="container-login100">
-        <div class="wrap-login100">
-            <div class="login100-pic js-tilt" data-tilt>
-                <img src="${path}/static/image/login/loginicon.png" alt="IMG">
+<div id="container">
+    <div class="admin-login-background">
+        <form class="layui-form" action="">
+            <div>
+                <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
+                <label>
+                    <input type="text" name="credential" id="credential"
+                           placeholder="用户名/邮箱/手机号" autocomplete="off"
+                           class="layui-input admin-input admin-input-username">
+                </label>
             </div>
-            <form class="login100-form validate-form">
-                <span class="login100-form-title">登录</span>
-                <div class="wrap-input100 validate-input">
-                    <input class="input100" type="text" name="bindEmail" id="bindEmail" placeholder="邮箱">
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-						<i class="fa fa-envelope" aria-hidden="true"></i>
-					</span>
+            <div>
+                <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
+                <label>
+                    <input type="password" id="password"
+                           placeholder="密码"
+                           autocomplete="off"
+                           class="layui-input admin-input">
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="text" name="verify"
+                           placeholder="验证码"
+                           autocomplete="off"
+                           class="layui-input admin-input admin-input-verify">
+                </label>
+                <img class="admin-captcha" src="${path}/static/image/login/yzm.png"
+                     onclick="updateVerify()" alt="验证码">
+            </div>
+            <div class="layui-form-item" pane="">
+                <div class="layui-inline">
+                    <input type="checkbox" name="like1[write]" lay-skin="primary" title="记住我" checked="">
                 </div>
-                <div class="wrap-input100 validate-input">
-                    <input class="input100" type="password" name="password" id="password" placeholder="密码">
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-						<i class="fa fa-lock" aria-hidden="true"></i>
-					</span>
+                <div class="layui-inline" style="float: right;margin-top: 9px;">
+                    <a href="javascript:">忘记密码了吗?</a>
                 </div>
-                <div class="container-login100-form-btn">
-                    <input type="button" class="login100-form-btn" id="submit" value="登！">
-                </div>
-                <div class="text-center p-t-12">
-                    <a class="txt2" href="javascript:">忘记密码？</a>
-                </div>
-                <div class="text-center p-t-136">
-                    <a class="txt2" href="#">还没有账号？立即注册<i class="fa fa-long-arrow-right m-l-5"
-                                                          aria-hidden="true"></i></a>
-                </div>
-            </form>
+            </div>
+            <button type="button" class="layui-btn" id="submit">登&nbsp;&nbsp;&nbsp;录</button>
+        </form>
+        <div class="register" id="r" pane="">
+            <div class="layui-inline" style="margin-top: 9px;">
+                <p><a href="javascript:" style="color: #2d8cf0">注册一个账号</a></p>
+            </div>
         </div>
     </div>
 </div>
-</body>
-<script type="text/javascript">
-    Notiflix.Notify.Init();
-    Notiflix.Report.Init();
-    Notiflix.Confirm.Init();
-    Notiflix.Loading.Init({
-        clickToClose: false
-    });
-    $("#submit").click(function () {
-        var bindEmail = $("#bindEmail").val();
-        var password = $("#password").val();
-        Notiflix.Loading.Circle();
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" type="text/javascript"></script>
+<script src="https://www.layuicdn.com/layui-v2.5.4/layui.js" type="text/javascript"></script>
+<!--suppress ES6ConvertVarToLetConst -->
+<script>
+    layui.use('form', function () {
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        var layer = layui.layer;
+        form.render();
+
+        $("#submit").click(function () {
+            var _this = this;
+            $("#r").attr("style", "margin-top:6px");
+            $(this).attr("disabled", "");
+            $(this).attr("class", "bushi-layui-btn");
+            $(this).html("<i class=\"layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop\" " +
+                "style=\"color: #fff;font-size: 30px;margin-left:-10px;margin-top: -16px\"></i>");
+
+            var credential = $("#credential").val(),
+                password = $("#password").val();
             $.ajax({
                 type: "POST",
                 url: "${path}/user/doLogin",
                 data: {
-                    "bindEmail": bindEmail,
-                    "password": password
+                    "password": password,
+                    "credential": credential
                 },
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
-                    window.location.href = data.resource;
+                    if (data.flag)
+                        window.location.href = data.resource;
+                    else {
+                        layer.alert(data.message);
+                        $("#r").attr("style", "margin-top:10px");
+                        $(_this).removeAttr("disabled");
+                        $(_this).attr("class", "layui-btn");
+                        $(_this).html("登&nbsp;&nbsp;&nbsp;录");
+                    }
                 },
                 error: function (e) {
-                    console.error("请求错误",e);
+                    console.error("请求错误", e);
+                    $("#r").attr("style", "margin-top:10px");
+                    $(_this).removeAttr("disabled");
+                    $(_this).attr("class", "layui-btn");
+                    $(_this).html("登&nbsp;&nbsp;&nbsp;录");
                 }
             })
+        })
     });
+
+    function updateVerify() {
+    }
 </script>
+</body>
 </html>

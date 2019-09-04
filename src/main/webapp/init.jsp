@@ -17,14 +17,14 @@
     <title>checking...</title>
 </head>
 <%--suppress HtmlDeprecatedAttribute --%>
-<body bgcolor="#6495ed"></body>
+<body></body>
 <script type="text/javascript">
     Notiflix.Loading.Init({
         clickToClose: false
     });
 
     function random() {
-        var x = 1000;
+        var x = 500;
         var y = 300;
         return parseInt(Math.random() * (x - y + 1) + y);
     }

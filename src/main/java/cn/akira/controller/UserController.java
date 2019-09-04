@@ -54,8 +54,15 @@ public class UserController {
 
     @RequestMapping("doLogin")
     @ResponseBody
-    public CommonData doLogin(User user, HttpSession session, HttpServletRequest request) throws Exception {
-        session.removeAttribute("SESSION_USER");
+    public CommonData doLogin(User user, @RequestParam("credential") String credential, HttpSession session, HttpServletRequest request) throws Exception {
+        String phoneReg = "^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\\d{8}$";
+        if (credential.contains("@")) {
+            user.setBindEmail(credential);
+        } else if (credential.matches(phoneReg)) {
+            user.setBindPhone(credential);
+        } else {
+            user.setUname(credential);
+        }
         boolean unameIsEmpty = user.getUname() == null || user.getUname().equals("");
         boolean phoneIsEmpty = user.getBindPhone() == null || user.getBindPhone().equals("");
         boolean emailIsEmpty = user.getBindEmail() == null || user.getBindEmail().equals("");
@@ -71,14 +78,21 @@ public class UserController {
         User dbUser = userService.getUser(user);
         if (dbUser != null) {
             //将用户信息存储到会话的中
-            String password = dbUser.getPassword();
+            String password = user.getPassword();
+            session.removeAttribute("SESSION_USER");
+
             /*
             数据库中的密码已经是经过sha1加密过了的，考虑到一些简单密码的sha1校验值的唯一性，可能会存在安全隐患
             遂再将校验值进行RSA加密
              */
             String encryptedPassword = RSAUtil.encrypt(password);
-            dbUser.setPassword(encryptedPassword);
-            session.setAttribute("SESSION_USER", dbUser);
+            user.setPassword(encryptedPassword);
+            String userHeadIcon = userService.getUserHeadIcon(dbUser.getId());
+            UserInfo userInfo = user.getUserInfo() == null ? new UserInfo() : user.getUserInfo();
+            userInfo.setHeadIcon(userHeadIcon);
+            user.setUserInfo(userInfo);
+            user.setUname(user.getUname() == null ? dbUser.getUname() : user.getUname());
+            session.setAttribute("SESSION_USER", user);
             CommonData result = new CommonData();
             result.setResource(request.getContextPath() + "/index");
             return result;
@@ -87,27 +101,13 @@ public class UserController {
             CommonData result = new CommonData();
             result.setResource(request.getContextPath() + "/user/login");
             result.setFlag(false);
+            result.setMessage("登录失败");
             return result;
         }
     }
 
-    @RequestMapping("userList1")
-    public String userListPage1(Model model) throws Exception {
-//        List<User> userBaseInfoList = userService.getUserBaseInfoList();
-//        List<User> users = new ArrayList<>();
-//        for (User user : userBaseInfoList) {
-//            users.add(CastUtil.genderCast(user));
-//        }
-//        model.addAttribute("userList", users);
-        return "user/userList1";
-    }
 
-    @RequestMapping("userList2")
-    public String userListPage2() {
-        return "user/userList2";
-    }
-
-    @RequestMapping("userList3")
+    @RequestMapping("userList")
     public String userListPage3(Model model) {
         try {
             List<User> allUsersInfo = userService.getAllUsersInfo();
@@ -115,31 +115,12 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "user/userList3";
+        return "user/userList";
     }
 
-    @RequestMapping("listUser2")
+    @RequestMapping("listUser")
     @ResponseBody
-    public CommonData listUser2() {
-//        try {
-//            List<User> userBaseInfoList = userService.getUserBaseInfoList();
-//            List<User> users = new ArrayList<>();
-//            for (User user : userBaseInfoList) {
-//                users.add(CastUtil.genderCast(user));
-//            }
-//            CommonData commonData = new CommonData();
-//            commonData.setResource(users);
-//            return commonData;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-        return null;
-    }
-
-    @RequestMapping("listUser3")
-    @ResponseBody
-    public CommonData listUser3() {
+    public CommonData listUser() {
         try {
             CommonData data = new CommonData();
             List<User> allUsersInfo = userService.getAllUsersInfo();
