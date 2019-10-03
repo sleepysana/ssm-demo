@@ -25,9 +25,6 @@ import java.util.Map;
 public class MainController {
 
     @Autowired
-    private UserService userService;
-
-	@Autowired
 	private VerifyCodeService verifyCodeService;
 
 	@RequestMapping("index")

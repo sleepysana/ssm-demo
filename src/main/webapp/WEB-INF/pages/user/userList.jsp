@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>table模块快速使用</title>
+    <title>用户列表</title>
     <link rel="stylesheet" href="${path}/static/css/layui/layui.css" media="all">
 </head>
 <body>
@@ -168,13 +168,13 @@
             console.log("你说的这个data它就是", data);
             switch (data.event) {
                 case 'add':
-                    layer.open({
+                    parent.layer.open({
                         type: 2,
                         moveOut: true,
                         scrollbar: false,
                         title: '添加一个用户',
                         closeBtn: 1,
-                        area: ['80%', '100%'],
+                        area: ['1000px', '620px'],
                         <%--content: '${path}/user/showAddUser'--%>
                         content: '${path}/user/showAddUser'
                     });
@@ -238,13 +238,13 @@
     });
 
     function showEditUser(id) {
-        layer.open({
+        parent.layer.open({
             type: 2,
             moveOut: true,
             scrollbar: false,
             title: '编辑用户 ' + id,
             closeBtn: 1,
-            area: ['80%', '100%'],
+            area: ['1000px', '620px'],
             content: '${path}/user/showEditUser/' + id
         });
     }
