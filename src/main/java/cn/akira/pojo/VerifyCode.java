@@ -12,6 +12,8 @@ public class VerifyCode implements Serializable {
 
     private Integer vrfType;
 
+    private String fileName;
+
     private Date genDate;
 
     private static final long serialVersionUID = 1L;
@@ -48,6 +50,14 @@ public class VerifyCode implements Serializable {
         this.vrfType = vrfType;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     public Date getGenDate() {
         return genDate;
     }
@@ -58,16 +68,13 @@ public class VerifyCode implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", userId=").append(userId);
-        sb.append(", bindEmail=").append(bindEmail);
-        sb.append(", vrfCode=").append(vrfCode);
-        sb.append(", vrfType=").append(vrfType);
-        sb.append(", genDate=").append(genDate);
-        sb.append("]");
-        return sb.toString();
+        return "VerifyCode{" +
+                "userId=" + userId +
+                ", bindEmail='" + bindEmail + '\'' +
+                ", vrfCode='" + vrfCode + '\'' +
+                ", vrfType=" + vrfType +
+                ", fileName='" + fileName + '\'' +
+                ", genDate=" + genDate +
+                '}';
     }
 }

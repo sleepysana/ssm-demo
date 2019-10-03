@@ -76,4 +76,9 @@ public class TestUtil {
         br.close();
         return keyList;
     }
+
+    @Test
+    public void dl() throws IOException {
+        ValidateUtil.generateVerifyCode("D:\\Common\\AppData\\Tomcat\\deployed_resources\\akira\\");
+    }
 }

@@ -157,4 +157,9 @@ public class UserServiceImpl implements UserService {
 
         return new CommonData("改好了");
     }
+
+    @Override
+    public Integer getUserIdByBindEmail(String bindEmail) throws Exception {
+        return userMapper.queryIdByBindEmail(bindEmail);
+    }
 }

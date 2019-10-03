@@ -83,7 +83,7 @@ public class UserController {
 
             /*
             数据库中的密码已经是经过sha1加密过了的，考虑到一些简单密码的sha1校验值的唯一性，可能会存在安全隐患
-            遂再将校验值进行RSA加密
+            遂再将校验值进行RSA加密再存入Session
              */
             String encryptedPassword = RSAUtil.encrypt(password);
             user.setPassword(encryptedPassword);
@@ -105,7 +105,6 @@ public class UserController {
             return result;
         }
     }
-
 
     @RequestMapping("userList")
     public String userListPage3(Model model) {

@@ -13,7 +13,7 @@
 <body>
 <div id="container">
     <div class="admin-login-background">
-        <form class="layui-form" action="">
+        <form class="layui-form">
             <div>
                 <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
                 <label>
@@ -53,7 +53,7 @@
         </form>
         <div class="register" id="r" pane="">
             <div class="layui-inline" style="margin-top: 9px;">
-                <p><a href="javascript:" style="color: #2d8cf0">注册一个账号</a></p>
+                <p><a href="javascript:" id="reg" style="color: #2d8cf0">注册一个账号</a></p>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
 <!--suppress ES6ConvertVarToLetConst -->
 <script>
     layui.use('form', function () {
-        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        var form = layui.form;
         var layer = layui.layer;
         form.render();
 
@@ -105,6 +105,10 @@
                 }
             })
         })
+    });
+
+    $("#reg").click(function () {
+        window.location.href = "${path}/register"
     });
 
     function updateVerify() {

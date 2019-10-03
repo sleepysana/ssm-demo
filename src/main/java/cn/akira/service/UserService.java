@@ -31,5 +31,5 @@ public interface UserService {
 
     CommonData updateUserDetail(User user) throws Exception;
 
+    Integer getUserIdByBindEmail(String bindEmail) throws Exception;
 }
-

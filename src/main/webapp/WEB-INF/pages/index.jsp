@@ -42,7 +42,8 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    <img src="${path}/resource/image/head/${SESSION_USER.userInfo.headIcon}" class="layui-nav-img" alt="头像">
+                    <img src="${path}/resource/image/head/${SESSION_USER.userInfo.headIcon}" class="layui-nav-img"
+                         alt="头像">
                     ${SESSION_USER.uname}
                 </a>
                 <dl class="layui-nav-child">
