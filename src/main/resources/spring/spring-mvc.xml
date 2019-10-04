@@ -29,6 +29,8 @@
             <mvc:exclude-mapping path="/register"/>
             <mvc:exclude-mapping path="/register/**/*"/>
             <mvc:exclude-mapping path="/generateVerifyCode"/>
+            <mvc:exclude-mapping path="/error"/>
+            <mvc:exclude-mapping path="/error/**/*"/>
             <bean class="cn.akira.interceptor.SessionInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

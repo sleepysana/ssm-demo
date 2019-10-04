@@ -292,7 +292,7 @@ label {
     display: inline-block;
     width: 16px;
     height: 16px;
-    background: url(../images/showPwd.png) no-repeat center center;
+    background: url(../../image/register/showPwd.png) no-repeat center center;
     background-size: 16px 16px;
     position: absolute;
     top: 8px;
@@ -301,7 +301,7 @@ label {
 }
 
 .showpwd.hidepwd {
-    background-image: url(../images/hidePwd.png);
+    background-image: url(../../image/register/hidePwd.png);
 }
 
 .yzm:hover{

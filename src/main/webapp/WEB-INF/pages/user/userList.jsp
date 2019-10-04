@@ -1,4 +1,4 @@
-<%--suppress HtmlUnknownAttribute,JSValidateJSDoc,JSUnresolvedVariable --%>
+<%--suppress HtmlUnknownAttribute,JSValidateJSDoc,JSUnresolvedVariable,SpellCheckingInspection --%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set value="${pageContext.request.contextPath}" var="path" scope="page"/>

@@ -14,7 +14,7 @@ public class UserInfo implements Serializable {
     /**
      * 用户头像
      */
-    private String headIcon;
+    private String headIcon = "default_head_icon.png";
 
     /**
      * 性别(0或null:未设置, 1:男, 2:女, 3:其他性别, 4:保密)

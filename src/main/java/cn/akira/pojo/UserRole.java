@@ -11,7 +11,7 @@ public class UserRole implements Serializable {
     /**
      * 用户角色(-1:未激活)
      */
-    private Integer role;
+    private Integer role = 1;
 
     private static final long serialVersionUID = 1L;
 

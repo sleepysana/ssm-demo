@@ -12,29 +12,30 @@
     </resultMap>
     <insert id="insert" parameterType="cn.akira.pojo.VerifyCode">
         <!--@mbg.generated-->
-        insert into verify_code (user_id, bind_email, vrf_code,
+        INSERT INTO verify_code (user_id, bind_email, vrf_code,
         vrf_type, gen_date)
-        values (#{userId,jdbcType=INTEGER}, #{bindEmail,jdbcType=VARCHAR}, #{vrfCode,jdbcType=VARCHAR},
+        VALUES (#{userId,jdbcType=INTEGER}, #{bindEmail,jdbcType=VARCHAR}, #{vrfCode,jdbcType=VARCHAR},
         #{vrfType,jdbcType=INTEGER}, #{genDate,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="cn.akira.pojo.VerifyCode">
-        insert into verify_code
+        INSERT INTO verify_code
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">
-                user_id,
+                USER_ID,
             </if>
             <if test="bindEmail != null">
-                bind_email,
+                BIND_EMAIL,
             </if>
             <if test="vrfCode != null">
-                vrf_code,
+                VRF_CODE,
             </if>
             <if test="vrfType != null">
-                vrf_type,
+                VRF_TYPE,
             </if>
             <if test="fileName != null and fileName != ''">
-                file_name
+                FILE_NAME,
             </if>
+            GEN_DATE
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">
@@ -52,6 +53,29 @@
             <if test="fileName != null and fileName != ''">
                 #{fileName,jdbcType=VARCHAR},
             </if>
+            SYSDATE()
         </trim>
     </insert>
+
+    <select id="queryAllByFileName" parameterType="java.lang.String" resultType="cn.akira.pojo.VerifyCode">
+        SELECT *
+        FROM verify_code
+        WHERE file_name = #{fileName}
+    </select>
+
+    <delete id="deleteByEmail" parameterType="java.lang.String">
+        DELETE
+        FROM verify_code
+        WHERE bind_email = #{email}
+    </delete>
+
+    <select id="queryAllByBindEmail" parameterType="java.lang.String" resultType="cn.akira.pojo.VerifyCode">
+        SELECT *
+        FROM verify_code
+        WHERE bind_email = #{email}
+          AND gen_date = (SELECT MAX(gen_date)
+                          FROM verify_code
+                          WHERE bind_email = #{email})
+        LIMIT 1
+    </select>
 </mapper>

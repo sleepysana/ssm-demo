@@ -25,7 +25,7 @@ public class User implements Serializable {
     private String bindPhone;
 
     /**
-     * 密码(已加密)
+     * 密码
      */
     private String password;
 

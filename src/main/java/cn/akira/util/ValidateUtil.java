@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class ValidateUtil {
 
     private static final char[] CODE_SEQUENCE= {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',

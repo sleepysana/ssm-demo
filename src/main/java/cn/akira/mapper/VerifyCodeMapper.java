@@ -2,6 +2,7 @@ package cn.akira.mapper;
 
 import cn.akira.pojo.VerifyCode;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Mapper
 public interface VerifyCodeMapper {
@@ -18,4 +19,10 @@ public interface VerifyCodeMapper {
      * @return insert count
      */
     int insertSelective(VerifyCode record);
+    
+    VerifyCode queryAllByFileName(@RequestParam("fileName") String fileName);
+
+    int deleteByEmail(@RequestParam("email") String email);
+
+    VerifyCode queryAllByBindEmail(@RequestParam("email") String email);
 }

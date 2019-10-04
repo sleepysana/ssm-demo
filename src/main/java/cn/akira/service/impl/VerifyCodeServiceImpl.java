@@ -34,11 +34,31 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
 	}
 
 	@Override
+	@Transactional
 	public CommonData insert(VerifyCode verifyCode) throws Exception {
 		int i = verifyCodeMapper.insertSelective(verifyCode);
 		if (i == 1) {
-			return new CommonData();
+			return new CommonData("验证码持久化成功");
 		} else
 			return new CommonData("我...失败了吗...", false);
+	}
+
+	@Override
+	public CommonData getAllByFileName(String fileName) throws Exception {
+		VerifyCode verifyCode = verifyCodeMapper.queryAllByFileName(fileName);
+		CommonData commonData = new CommonData();
+		commonData.setResource(verifyCode.getVrfCode());
+		return commonData;
+	}
+
+	@Override
+	@Transactional
+	public int deleteByEmail(String email) throws Exception{
+		return verifyCodeMapper.deleteByEmail(email);
+	}
+
+	@Override
+	public VerifyCode getAllByEmail(String email) throws Exception {
+		return verifyCodeMapper.queryAllByBindEmail(email);
 	}
 }
