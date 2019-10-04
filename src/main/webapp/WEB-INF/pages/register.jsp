@@ -114,13 +114,13 @@
                             <label class="focus valid" style="left:370px"></label>
                         </div>
                     </div>
-                    <div class="item col-xs-12" style="height:auto">
-                        <span class="intelligent-label f-fl">&nbsp;</span>
-                        <p class="f-size14 required">
-                            <input type="checkbox" checked/><a href="javascript:showoutc();" class="f-ml5">我已阅读并同意条款</a>
-                        </p>
-                        <label class="focus valid"></label>
-                    </div>
+                    <%--                    <div class="item col-xs-12" style="height:auto">--%>
+                    <%--                        <span class="intelligent-label f-fl">&nbsp;</span>--%>
+                    <%--                        <p class="f-size14 required">--%>
+                    <%--                            <input type="checkbox" checked/><a href="javascript:showoutc();" class="f-ml5">我已阅读并同意条款</a>--%>
+                    <%--                        </p>--%>
+                    <%--                        <label class="focus valid"></label>--%>
+                    <%--                    </div>--%>
                     <div class="item col-xs-12">
                         <span class="intelligent-label f-fl">&nbsp;</span>
                         <div class="f-fl item-ifo">
@@ -200,6 +200,7 @@
     var resentEmailCanBeClicked = true;
     var p1flag = false;
     var errData;
+    var emailFlag = false;
 
     $(document).ready(function () {
         generateVerifyCode();
@@ -214,16 +215,15 @@
     });
 
     function showErrInfo() {
-        console.log("乐乐乐 ",errData);
-        // console.log("安放处 ",errDetail);
+        console.log("乐乐乐 ", errData);
     }
 
     function errMsgProc(data) {
         var errDetailStr = "";
-        for(var i = 0;i<data.errDetail.length;i++){
-            errDetailStr+=("at "+data.errDetail[i].className+"("
-                +data.errDetail[i].fileName+":"+
-                data.errDetail[i].lineNumber+")\n")
+        for (var i = 0; i < data.errDetail.length; i++) {
+            errDetailStr += ("at " + data.errDetail[i].className + "("
+                + data.errDetail[i].fileName + ":" +
+                data.errDetail[i].lineNumber + ")\n")
         }
         return {"errInfo": data.errInfo, "errDetail": errDetailStr};
     }
@@ -276,7 +276,7 @@
                     data: {"username": $("#username").val()},
                     dataType: "json",
                     success: function (data) {
-                        console.log("用户名检查成功回调",data);
+                        console.log("用户名检查成功回调", data);
                         if (data.flag) {
                             $("#usernametip").css("color", "#999");
                             $("#usernametip").html(" ");
@@ -292,11 +292,11 @@
                         }
                     },
                     error: function (e) {
-                        console.log("用户名占用检查失败回调:",e)
+                        console.log("用户名占用检查失败回调:", e)
                     }
                 })
             }
-        }else{
+        } else {
             console.log("用户名前台检查不通过");
         }
     });
@@ -332,6 +332,7 @@
         $("#usernametip").css("color", "#ff2e44");
         $("#usernametip").html("连这么简单的要求都做不到吗?");
     }
+
     /*************************
      /******用户名校验结束******
      *************************/
@@ -341,12 +342,19 @@
      *************************/
     $("#email").keyup(function () {
         $("#email").val(fuckSpaces($("#email").val()));
-    });
-    $("#email").change(function () {
-        $("#email").val(fuckSpaces($("#email").val()));
         emailTipRestore();
     });
     $("#email").blur(function () {
+        var emailtip = $("#emailtip"),
+            es = $("#es");
+        es.removeClass("icon-sucessfill blank");
+        es.addClass("icon-sucessfill blank hide");
+        if (emailFlag) {
+            es.removeClass("icon-sucessfill blank hide");
+            es.addClass("icon-sucessfill blank");
+        }
+    });
+    $("#email").change(function () {
         $("#email").val(fuckSpaces($("#email").val()));
         if (emailCheck()) {
             var emailtip = $("#emailtip"),
@@ -368,9 +376,13 @@
                         es.removeClass("icon-sucessfill blank hide");
                         es.addClass("icon-sucessfill blank");
                         p1flag = true;
+                        emailFlag = true;
                     } else {
+                        es.removeClass("icon-sucessfill blank");
+                        es.addClass("icon-sucessfill blank hide");
                         emailtip.css("color", "#ff2e44");
                         emailtip.html(data.message);
+                        emailFlag = false;
                     }
                 },
                 error: function (e) {
@@ -378,11 +390,6 @@
                 }
             });
         }
-    });
-
-    $("#email").focus(function () {
-        $("#email").val(fuckSpaces($("#email").val()));
-        emailTipRestore();
     });
 
     function emailTipRestore() {
@@ -416,6 +423,7 @@
             }
         } else return false;
     }
+
     /*************************
      /******-邮箱校验结束-******
      *************************/
@@ -441,7 +449,7 @@
                 var index = o.lastIndexOf("/");
                 var checkPicCode = $.ajax({
                     type: "POST",
-                    url: "${path}/checkPicCode",
+                    url: "${path}/register/verifyPicCode",
                     contentType: 'application/x-www-form-urlencoded;charset=utf-8',
                     cache: false,
                     async: true,
@@ -453,13 +461,13 @@
                     success: function (data) {
                         p1flag = data.flag;
                         if (!data.flag) {
-                            Dialog.error("还是不行", data.msg);
+                            Dialog.error("还是不行", data.message);
                             generateVerifyCode();
                         }
                     },
                     error: function (e) {
                         console.error("图片验证码生成失败回调 - ", e);
-                        // Dialog.error("还是不行",data.msg);
+                        // Dialog.error("还是不行",data.message);
                     }
                 });
                 $.when(checkPicCode).done(function () {
@@ -480,12 +488,12 @@
                 type: "POST",
                 contentType: 'application/x-www-form-urlencoded;charset=utf-8',
                 data: {
-                    "username": $("#username").val(),
-                    "email": $("#email").val(),
+                    "uname": $("#username").val(),
+                    "bindEmail": $("#email").val(),
                     "password": $("#password").val(),
                     "verifyCode": $("#verifyNo").val()
                 },
-                url: "${path}/doReg",
+                url: "${path}/register/doReg",
                 dataType: "json",
                 success: function (data) {
                     console.log("注册按钮成功回调", data);
@@ -504,7 +512,7 @@
                             }
                         });
                     } else {
-                        Dialog.error("∑(っ°Д°;)っ", data.msg);
+                        Dialog.error("∑(っ°Д°;)っ", data.message);
                     }
                 },
                 error: function (e) {
@@ -514,7 +522,6 @@
         } else {
             Dialog.error("ﾍ(;´Д｀ﾍ)", "验证码错误");
         }
-
     });
 
     $("#verifyYz").click(function () {
@@ -523,7 +530,7 @@
                 type: "POST",
                 contentType: 'application/x-www-form-urlencoded;charset=utf-8',
                 data: {"email": $("#email").val()},
-                url: "${path}/verifyEmail",
+                url: "${path}/register/sendVerifyEmail",
                 dataType: "json",
                 success: function (data) {
                     console.log("重发验证码成功回调 -- ", data)
@@ -581,14 +588,13 @@
     }
 
     function submit() {
-        console.log("是不是要提交呢?",p1flag);
         if (p1flag) {
             var email = $("#email").val();
             var password1 = $("#password").val();
             var password2 = $("#rePassword").val();
             $.ajax({
                 type: "POST",
-                url: "${path}/verifyEmail",
+                url: "${path}/register/sendVerifyEmail",
                 contentType: 'application/x-www-form-urlencoded;charset=utf-8',
                 data: {
                     "email": email,
