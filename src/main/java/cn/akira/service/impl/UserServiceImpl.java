@@ -154,8 +154,7 @@ public class UserServiceImpl implements UserService {
         userMapper.updateAllById(user);
         userInfoMapper.updateAllById(user.getUserInfo());
         userRoleMapper.updateAllById(user.getRole());
-
-        return new CommonData("改好了");
+        return new CommonData("修改成功");
     }
 
     @Override

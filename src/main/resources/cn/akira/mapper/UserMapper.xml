@@ -33,7 +33,7 @@
     </resultMap>
     <select id="queryUser" resultMap="user">
         SELECT *
-        FROM ssm_demo.user
+        FROM luott_Demo_DB.user
         <where>
             <if test="uname != null and uname != ''">
                 uname=#{uname}
@@ -48,7 +48,7 @@
     </select>
     <select id="queryActivatedUser" resultType="cn.akira.pojo.User">
         SELECT *
-        FROM ssm_demo.user
+        FROM luott_Demo_DB.user
         <where>
             <if test="uname != null and uname != ''">
                 uname=#{uname}

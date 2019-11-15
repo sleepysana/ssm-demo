@@ -101,7 +101,7 @@ public class UserController {
             CommonData result = new CommonData();
             result.setResource(request.getContextPath() + "/user/login");
             result.setFlag(false);
-            result.setMessage("登录失败");
+            result.setMessage("用户名或密码不正确");
             return result;
         }
     }

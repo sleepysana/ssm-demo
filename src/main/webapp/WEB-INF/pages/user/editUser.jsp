@@ -360,6 +360,7 @@
                 realName = $("#realName").val(),
                 cid = $("#cid").val(),
                 certType = $("#certType").val();
+            role = role == null ? 99 : role;
             layer.load(1);
             $.ajax({
                 type: "post",
@@ -399,11 +400,11 @@
                             goToErrorPage(data);
                         }
                     } else {
-                        var index = parent.layer.getFrameIndex(window.name);
+                        // var index = parent.layer.getFrameIndex(window.name);
                         layer.alert(data.message, {
                             end: function () {
-                                layer.closeAll();
-                                parent.layui.table.reload("userListData");
+                                parent.layer.closeAll();
+                                parent.parent.layui.table.reload("userListData");
                             }
                         });
                     }
