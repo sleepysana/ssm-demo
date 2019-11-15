@@ -7,15 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e22cd3e7-6140-462a-960d-3184082ef944" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/akira/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/akira/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/akira/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/akira/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/cn/akira/mapper/UserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/cn/akira/mapper/UserMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/jdbc.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/jdbc.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/user/addUser.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/user/addUser.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/user/editUser.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/user/editUser.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/user/userList.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/user/userList.jsp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -330,7 +322,7 @@
       <workItem from="1573694516348" duration="836000" />
       <workItem from="1573715887463" duration="7167000" />
       <workItem from="1573782709325" duration="4164000" />
-      <workItem from="1573809508553" duration="60000" />
+      <workItem from="1573809508553" duration="590000" />
     </task>
     <task id="LOCAL-00001" summary="完善多项功能">
       <created>1566044338300</created>
@@ -430,7 +422,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571889761687</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="更改数据库地址">
+      <created>1573810094439</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1573810094439</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -471,7 +470,8 @@
     <MESSAGE value="换了个登录界面，并为注册功能做准备" />
     <MESSAGE value="不再忽略IDEA配置文件" />
     <MESSAGE value="添加配置文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加配置文件" />
+    <MESSAGE value="更改数据库地址" />
+    <option name="LAST_COMMIT_MESSAGE" value="更改数据库地址" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ssm_demo$BeanToJsonTest_.ic" NAME="BeanToJsonTest.就是类名说的意思 Coverage Results" MODIFIED="1566957324096" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">

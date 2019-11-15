@@ -21,7 +21,8 @@
 <script src="${path}/static/js/common/jquery-3.4.1.min.js" type="text/javascript"></script>
 <script src="${path}/static/js/layui/layui.js"></script>
 <%--suppress JSUnfilteredForInLoop --%>
-<script>
+<script type="text/javascript">
+    var fatherOrMother = parent;
     var headPath = "${path}/resource/image/head/";
     var TABLE_INS;
     layui.use('table', function () {
@@ -90,7 +91,9 @@
                 };
             },
             cols: [[ //表头
-                {field: 'chk', type: 'checkbox', fixed: 'left'},
+                {
+                    field: 'chk', type: 'checkbox', fixed: 'left'
+                },
                 {
                     field: 'id', title: 'ID', templet: '<div>' +
                         '<img alt="icon" src=' + headPath + '{{d.userInfo.headIcon}} class="layui-nav-img" style="width:25px;height:25px"> ' +
@@ -122,8 +125,8 @@
                 }
             ]], done: function () {
                 console.log("渲染完成回调");
-                $(".id981008").hide();
-                $(".id981009").hide();
+                $(".id1").hide();
+                $(".id2").hide();
             }
         });
         TABLE_INS = tableIns;
@@ -165,7 +168,6 @@
          * 工具栏监听
          */
         table.on('toolbar(userListLayFilter)', function (data) {
-            console.log("你说的这个data它就是", data);
             switch (data.event) {
                 case 'add':
                     parent.layer.open({
@@ -176,7 +178,10 @@
                         closeBtn: 1,
                         area: ['1000px', '620px'],
                         <%--content: '${path}/user/showAddUser'--%>
-                        content: '${path}/user/showAddUser'
+                        content: '${path}/user/showAddUser',
+                        end: function () {
+                            layui.table.reload("userListData");
+                        }
                     });
                     break;
                 case 'update':
@@ -197,7 +202,6 @@
                     for (var i = 0; i < selectedData.length; i++) {
                         ids[i] = selectedData[i].id
                     }
-
                     layer.confirm(msg, {
                             btn: ['当然', '再考虑'] //可以无限个按钮
                         },
@@ -245,7 +249,10 @@
             title: '编辑用户 ' + id,
             closeBtn: 1,
             area: ['1000px', '620px'],
-            content: '${path}/user/showEditUser/' + id
+            content: '${path}/user/showEditUser/' + id,
+            end: function () {
+                layui.table.reload("userListData");
+            }
         });
     }
 

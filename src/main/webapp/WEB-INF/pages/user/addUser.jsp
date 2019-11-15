@@ -46,8 +46,8 @@
     <br>
     <div class="icon" name="user.UserInfo.headIcon">
         <img class="layui-nav-img"
-                src="${path}/resource/image/head/default_head_icon.png"
-                id="headIcon" style="width: 170px;height: 170px"
+             src="${path}/resource/image/head/default_head_icon.png"
+             id="headIcon" style="width: 170px;height: 170px"
              alt="我觉得你是傻逼">
     </div>
     <div style="margin:0 0 0 323px;">
@@ -188,6 +188,7 @@
 <script type="text/javascript" src="${path}/static/js/layui/layui.js"></script>
 <%--suppress JSUnfilteredForInLoop --%>
 <script>
+    console.log("这是你亲爱的父亲:", parent);
     layui.use(['form', 'layedit', 'laydate', 'upload'], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -367,8 +368,7 @@
                         console.log(index);
                         layer.alert(data.message, {
                             end: function () {
-                                layer.closeAll();
-                                parent.layui.table.reload("userListData");
+                                parent.layer.closeAll();
                                 parent.layer.close(index);
                             }
                         });
@@ -376,7 +376,7 @@
                 }, error: function (e) {
                     layer.alert("创建失败,因为后台没有响应", {
                         yes: function () {
-                            layer.close(layer.index-1);
+                            layer.close(layer.index - 1);
                             layer.close(layer.index);
                         }
                     });
